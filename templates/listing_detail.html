@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}{{ listing.title }} | BookBridge Details{% endblock %}
+
+{% block content %}
+<div class="container-xl py-4">
+
+    <!-- Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-decoration-none">Catalogue</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('index', course=listing.course) }}" class="text-decoration-none">{{ listing.course }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ listing.title|truncate(40) }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <!-- Main Listing Details Column -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                <!-- Header Banner -->
+                <div class="p-4 bg-light border-bottom d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <!-- Listing Type Badge -->
+                        {% if listing.listing_type == 'Lend' %}
+                            <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle px-3 py-2 fs-6">
+                                <i class="bi bi-arrow-repeat me-1"></i>Available to Lend
+                            </span>
+                        {% elif listing.listing_type == 'Exchange' %}
+                            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-3 py-2 fs-6">
+                                <i class="bi bi-arrow-left-right me-1"></i>Available for Exchange
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-2 fs-6">
+                                <i class="bi bi-gift-fill me-1"></i>Free Donation / Give-away
+                            </span>
+                        {% endif %}
+
+                        <!-- Availability Status Badge -->
+                        {% if listing.availability_status == 'Available' %}
+                            <span class="badge bg-success px-3 py-2"><i class="bi bi-check-circle me-1"></i>Available</span>
+                        {% elif listing.availability_status == 'Pending Handover' %}
+                            <span class="badge bg-warning text-dark px-3 py-2"><i class="bi bi-clock-history me-1"></i>Pending Handover</span>
+                        {% else %}
+                            <span class="badge bg-secondary px-3 py-2"><i class="bi bi-check2-all me-1"></i>Completed / Handed Over</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="small text-muted">
+                        <i class="bi bi-calendar3 me-1"></i>Listed: {{ listing.created_at[:10] }}
+                    </div>
+                </div>
+
+                <!-- Book Body Information -->
+                <div class="card-body p-4">
+                    <div class="d-flex gap-2 mb-2">
+                        <span class="badge bg-primary-subtle text-primary">{{ listing.course }}</span>
+                        <span class="badge bg-secondary-subtle text-secondary">{{ listing.semester }}</span>
+                    </div>
+
+                    <h2 class="fw-bold text-navy mb-2">{{ listing.title }}</h2>
+                    <h5 class="text-muted fw-normal mb-4">
+                        <i class="bi bi-person-fill text-secondary me-1"></i>Author(s): <strong>{{ listing.author }}</strong>
+                    </h5>
+
+                    <!-- Quick specs grid -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6">
+                            <div class="p-3 rounded-3 bg-light border">
+                                <small class="text-muted text-uppercase fw-bold d-block mb-1">Subject / Course Module</small>
+                                <span class="fw-semibold text-dark"><i class="bi bi-bookmark-check text-primary me-1"></i>{{ listing.subject }}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="p-3 rounded-3 bg-light border">
+                                <small class="text-muted text-uppercase fw-bold d-block mb-1">Book Condition</small>
+                                <span class="fw-semibold text-dark">
+                                    <i class="bi bi-stars text-warning me-1"></i>{{ listing.condition }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Book Description / Notes -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-navy mb-2"><i class="bi bi-file-text me-2 text-primary"></i>Description & Condition Notes</h5>
+                        <div class="p-3 bg-light rounded-3 text-secondary border">
+                            {% if listing.description %}
+                                {{ listing.description|replace('\n', '<br>')|safe }}
+                            {% else %}
+                                <em>No specific remarks provided. Standard syllabus reference textbook.</em>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Campus Handover Spot Info -->
+                    <div class="mb-4">
+                        <h5 class="fw-bold text-navy mb-2"><i class="bi bi-geo-alt-fill me-2 text-danger"></i>Approved Campus Meeting Point</h5>
+                        <div class="card border border-warning-subtle bg-warning-subtle bg-opacity-25 p-3 rounded-3">
+                            <div class="d-flex align-items-start gap-3">
+                                <div class="p-2 rounded bg-warning text-dark fs-4">
+                                    <i class="bi bi-shield-check"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1">{{ listing.meeting_point_name or "Campus Designated Area" }}</h6>
+                                    <p class="small text-muted mb-1">{{ listing.meeting_point_desc or "Open public area inside university grounds." }}</p>
+                                    <small class="badge bg-light text-dark border">
+                                        <i class="bi bi-clock me-1"></i>Hours: {{ listing.meeting_point_hours or "Daylight Campus Hours" }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Zone depending on User Role -->
+                    {% if g.user and g.user['id'] == listing.user_id %}
+                        <!-- Owner View -->
+                        <div class="alert alert-info d-flex align-items-center justify-content-between p-3 rounded-3">
+                            <div>
+                                <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+                                <strong>You posted this book.</strong> You can update its availability or edit details.
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="{{ url_for('edit_listing', listing_id=listing.id) }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-pencil me-1"></i>Edit Listing
+                                </a>
+                                <a href="{{ url_for('my_requests') }}" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-inbox me-1"></i>Check Requests
+                                </a>
+                            </div>
+                        </div>
+                    {% elif existing_request %}
+                        <!-- User has already requested -->
+                        <div class="alert alert-secondary p-3 rounded-3 border">
+                            <h6 class="fw-bold text-navy mb-2 d-flex align-items-center gap-2">
+                                <i class="bi bi-check2-circle text-success"></i>You have requested this book
+                            </h6>
+                            <p class="small mb-2 text-muted">Request Status: 
+                                {% if existing_request.status == 'Pending' %}
+                                    <span class="badge bg-warning text-dark">Pending Owner Review</span>
+                                {% elif existing_request.status == 'Accepted' %}
+                                    <span class="badge bg-success">Accepted! Coordinate Handover</span>
+                                {% elif existing_request.status == 'Declined' %}
+                                    <span class="badge bg-danger">Declined by Owner</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Completed</span>
+                                {% endif %}
+                            </p>
+                            <div class="small p-2 bg-white rounded border">
+                                <strong>Your message:</strong> "{{ existing_request.message }}"
+                            </div>
+                            {% if existing_request.owner_remarks %}
+                                <div class="small p-2 mt-2 bg-success-subtle text-success-emphasis rounded border border-success-subtle">
+                                    <strong>Owner response:</strong> "{{ existing_request.owner_remarks }}"
+                                </div>
+                            {% endif %}
+                            <div class="mt-3">
+                                <a href="{{ url_for('my_requests') }}" class="btn btn-sm btn-outline-primary">
+                                    Track in My Requests &rarr;
+                                </a>
+                            </div>
+                        </div>
+                    {% elif listing.availability_status != 'Available' %}
+                        <div class="alert alert-warning p-3 rounded-3">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            This learning material is currently marked as <strong>{{ listing.availability_status }}</strong>. You may check back later or browse other available listings.
+                        </div>
+                    {% elif not g.user %}
+                        <!-- Guest Prompt -->
+                        <div class="card bg-light border-0 p-4 rounded-3 text-center">
+                            <h5 class="fw-bold text-navy mb-2">Interested in borrowing or receiving this material?</h5>
+                            <p class="small text-muted mb-3">Sign in with your student campus account to express interest and arrange an approved handover.</p>
+                            <div class="d-flex justify-content-center gap-2">
+                                <a href="{{ url_for('login', next=request.url) }}" class="btn btn-primary px-4">Sign In to Request</a>
+                                <a href="{{ url_for('register') }}" class="btn btn-outline-secondary px-4">Register</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <!-- Active Express Interest Form -->
+                        <div class="card border-primary border-opacity-25 rounded-3 p-4 bg-light">
+                            <h5 class="fw-bold text-navy mb-2 d-flex align-items-center gap-2">
+                                <i class="bi bi-hand-thumbs-up-fill text-primary"></i>Express Interest in this Material
+                            </h5>
+                            <p class="small text-muted mb-3">
+                                Fill out this quick request. The book owner will review and coordinate the exchange at an approved campus meeting point.
+                            </p>
+
+                            <form action="{{ url_for('express_interest', listing_id=listing.id) }}" method="POST">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold small">Message to Book Owner <span class="text-danger">*</span></label>
+                                    <textarea name="message" class="form-control" rows="3" placeholder="Hello! I need this book for our MCA Semester 1 exams/assignments. Could we arrange a handover?" required></textarea>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <!-- If Lend: duration -->
+                                    {% if listing.listing_type == 'Lend' %}
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">Proposed Borrowing Duration</label>
+                                            <input type="text" name="proposed_duration" class="form-control" placeholder="e.g. 2 Weeks, Until Mid-Term Exams">
+                                        </div>
+                                    {% endif %}
+
+                                    <!-- If Exchange: offered item -->
+                                    {% if listing.listing_type == 'Exchange' %}
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold small">What book/material are you offering in return?</label>
+                                            <input type="text" name="offered_exchange_item" class="form-control" placeholder="e.g. Operating Systems by Galvin (Good condition)">
+                                        </div>
+                                    {% endif %}
+
+                                    <!-- Preferred Campus Meeting Point -->
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Preferred Campus Meeting Point</label>
+                                        <select name="meeting_point_id" class="form-select">
+                                            {% for mp in meeting_points %}
+                                                <option value="{{ mp.id }}" {% if mp.id == listing.preferred_meeting_point_id %}selected{% endif %}>
+                                                    {{ mp.name }} ({{ mp.operating_hours }})
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center justify-content-between pt-2">
+                                    <small class="text-muted"><i class="bi bi-shield-check text-success me-1"></i>Approved Campus Handover Protocol</small>
+                                    <button type="submit" class="btn btn-success px-4 fw-semibold">
+                                        <i class="bi bi-send-fill me-1"></i>Submit Interest Request
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar: Owner Profile & Campus Handover Tips -->
+        <div class="col-lg-4">
+            <!-- Student Owner Card -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <h6 class="text-uppercase fw-bold text-muted small mb-3">
+                    <i class="bi bi-person-badge-fill me-1 text-primary"></i>Listed by Student
+                </h6>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="avatar-lg bg-navy text-white rounded-circle d-flex align-items-center justify-content-center fs-4 fw-bold">
+                        {{ listing.owner_name[0] }}
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0 text-navy">{{ listing.owner_name }}</h5>
+                        <span class="badge bg-primary-subtle text-primary">{{ listing.owner_year }}</span>
+                        <small class="d-block text-muted">{{ listing.owner_dept }}</small>
+                    </div>
+                </div>
+
+                <div class="border-top pt-3 small text-muted">
+                    <div class="d-flex justify-content-between py-1">
+                        <span>Enrollment:</span>
+                        <span class="font-monospace text-dark">{{ listing.owner_enrollment }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between py-1">
+                        <span>Campus Email:</span>
+                        <span class="text-dark">{{ listing.owner_email }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Handover Safety Checklist Card -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-light">
+                <h6 class="fw-bold text-navy mb-3 d-flex align-items-center gap-2">
+                    <i class="bi bi-shield-check text-success fs-5"></i>Safe Handover Rules
+                </h6>
+                <ul class="list-unstyled small text-secondary mb-0 d-flex flex-column gap-2">
+                    <li class="d-flex gap-2">
+                        <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                        <span>Meet in university public zones during daylight hours (8:30 AM - 6:00 PM).</span>
+                    </li>
+                    <li class="d-flex gap-2">
+                        <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                        <span>Verify textbook edition, syllabus match, and physical pages on the spot.</span>
+                    </li>
+                    <li class="d-flex gap-2">
+                        <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                        <span>Strictly no off-campus or private residential meetups.</span>
+                    </li>
+                    <li class="d-flex gap-2">
+                        <i class="bi bi-check-circle-fill text-success mt-1"></i>
+                        <span>Zero cash transactions: Lend, Exchange, or Donate only.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Related Materials -->
+            {% if related_books %}
+                <div class="card border-0 shadow-sm rounded-4 p-4">
+                    <h6 class="fw-bold text-navy mb-3">Other Course Materials</h6>
+                    <div class="d-flex flex-column gap-3">
+                        {% for rb in related_books %}
+                            <div class="border-bottom pb-2">
+                                <a href="{{ url_for('listing_detail', listing_id=rb.id) }}" class="fw-semibold text-decoration-none text-navy d-block">
+                                    {{ rb.title }}
+                                </a>
+                                <small class="text-muted d-block">{{ rb.author }} &bull; <span class="badge bg-light text-dark border">{{ rb.listing_type }}</span></small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

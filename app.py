@@ -9,6 +9,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import os
+import re
 import sqlite3
 from database import get_db, init_db, DB_PATH
 
@@ -16,8 +17,12 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'bookbridge_mca_secret_key_2026_sanya')
 
 # Ensure database exists when application starts
-if not os.path.exists(DB_PATH):
-    init_db(seed=True)
+def ensure_db():
+    """Ensure database schema exists and initial records are seeded."""
+    if not os.path.exists(DB_PATH) or os.path.getsize(DB_PATH) == 0:
+        init_db(seed=True)
+
+ensure_db()
 
 # -------------------------------------------------------------
 # Authentication & Request Helpers
@@ -503,9 +508,16 @@ def register():
         course_year = request.form.get('course_year', 'MCA 1st Year').strip()
         phone = request.form.get('contact_phone', '').strip()
         
-        if not enrollment or not full_name or not email or not password:
+        if not enrollment or not full_name or not email or not password or not phone:
             flash("All fields marked with * are required.", "danger")
             return render_template('register.html')
+            
+        # Strict 10-digit Indian mobile number validation
+        clean_phone = re.sub(r'\D', '', phone)
+        if not re.match(r'^[6-9]\d{9}$', clean_phone):
+            flash("Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9.", "danger")
+            return render_template('register.html')
+        phone = clean_phone
             
         conn = get_db()
         # Check if enrollment or email is already registered
