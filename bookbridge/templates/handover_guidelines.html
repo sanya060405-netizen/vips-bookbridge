@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Safe Handover Guidelines | Vivekananda Institute of Professional Studies{% endblock %}
+
+{% block content %}
+<div class="container-xl py-5">
+    <!-- Header -->
+    <div class="text-center mb-5 max-w-750 mx-auto">
+        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill fw-semibold mb-2">
+            <i class="bi bi-shield-check me-1"></i>VIPS Campus Safety Protocol
+        </span>
+        <h2 class="display-6 fw-bold text-navy">Approved Campus Handover Guidelines</h2>
+        <p class="text-muted">
+            To safeguard student privacy and ensure physical safety, <strong>Vivekananda Institute of Professional Studies</strong> strictly enforces book handovers exclusively within approved on-campus locations. Personal residential addresses and off-campus meetups are prohibited.
+        </p>
+    </div>
+
+    <!-- 4 Key Safety Pillars -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center">
+                <div class="rounded-circle bg-primary-subtle text-primary mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; font-size: 1.6rem;">
+                    <i class="bi bi-sun-fill text-warning"></i>
+                </div>
+                <h5 class="fw-bold text-navy mb-2">Daylight Hours Only</h5>
+                <p class="small text-muted mb-0">
+                    All handovers must occur between <strong>8:30 AM and 6:00 PM</strong> on active academic working days when faculty and security are present.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center">
+                <div class="rounded-circle bg-success-subtle text-success mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; font-size: 1.6rem;">
+                    <i class="bi bi-geo-alt-fill text-success"></i>
+                </div>
+                <h5 class="fw-bold text-navy mb-2">Designated Campus Spots</h5>
+                <p class="small text-muted mb-0">
+                    Meet strictly at designated high-traffic points like the Central Library, SAC Atrium, or Department Lab lobbies. Never off-campus.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center">
+                <div class="rounded-circle bg-warning-subtle text-warning mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; font-size: 1.6rem;">
+                    <i class="bi bi-eye-fill text-warning-emphasis"></i>
+                </div>
+                <h5 class="fw-bold text-navy mb-2">Inspect on the Spot</h5>
+                <p class="small text-muted mb-0">
+                    Verify edition, missing pages, and highlighted notes in person before confirming receipt on BookBridge.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center">
+                <div class="rounded-circle bg-danger-subtle text-danger mx-auto d-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; font-size: 1.6rem;">
+                    <i class="bi bi-currency-rupee text-danger"></i>
+                </div>
+                <h5 class="fw-bold text-navy mb-2">Zero Cash Exchange</h5>
+                <p class="small text-muted mb-0">
+                    BookBridge is built for <strong>Lending, Book-for-Book Exchange, and Free Donation</strong>. Commercial selling is prohibited.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approved Campus Meeting Points Directory -->
+    <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5 mb-5">
+        <h4 class="fw-bold text-navy mb-2 d-flex align-items-center gap-2">
+            <i class="bi bi-building-check text-primary"></i>Official Approved Campus Handover Spots
+        </h4>
+        <p class="text-muted small mb-4">
+            These locations have been pre-approved by the student council and campus administration for verified peer exchanges:
+        </p>
+
+        <div class="row g-4">
+            {% for mp in meeting_points %}
+                <div class="col-md-6">
+                    <div class="p-3 rounded-3 bg-light border h-100 d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="fw-bold text-navy mb-0">
+                                <i class="bi bi-pin-map-fill text-danger me-1"></i>{{ mp.name }}
+                            </h5>
+                            <span class="badge bg-primary-subtle text-primary small">Monitored</span>
+                        </div>
+                        <p class="small text-secondary mb-2 flex-grow-1">
+                            {{ mp.location_desc }}
+                        </p>
+                        <div class="small text-muted pt-2 border-top">
+                            <div><i class="bi bi-clock me-1 text-primary"></i><strong>Hours:</strong> {{ mp.operating_hours }}</div>
+                            {% if mp.safety_notes %}
+                                <div class="mt-1"><i class="bi bi-info-circle me-1 text-info"></i><span class="fst-italic">{{ mp.safety_notes }}</span></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Step by Step Workflow for Students -->
+    <div class="card bg-navy text-white rounded-4 p-4 p-lg-5 mb-5 border-0">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-5">
+                <span class="badge bg-warning text-dark fw-bold mb-2">Step-by-Step Flow</span>
+                <h3 class="fw-bold mb-3">How Handover Works on BookBridge</h3>
+                <p class="text-white-75 small">
+                    A clear 4-step lifecycle ensures both students agree on the book condition, borrowing timeframe, and handover location before physically meeting.
+                </p>
+            </div>
+            <div class="col-lg-7">
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex align-items-start gap-3 bg-white bg-opacity-10 p-3 rounded-3 border border-white border-opacity-10">
+                        <div class="badge bg-warning text-dark fs-6 rounded-circle p-2 px-3 fw-bold">1</div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Student Submits Interest</h6>
+                            <p class="small mb-0 text-white-75">Click 'Express Interest', state why you need the book, and select an approved campus spot.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3 bg-white bg-opacity-10 p-3 rounded-3 border border-white border-opacity-10">
+                        <div class="badge bg-warning text-dark fs-6 rounded-circle p-2 px-3 fw-bold">2</div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Owner Accepts & Gives Time</h6>
+                            <p class="small mb-0 text-white-75">Book owner reviews in their dashboard, accepts, and writes a meeting note (e.g. "Tomorrow 1:30 PM outside Library").</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3 bg-white bg-opacity-10 p-3 rounded-3 border border-white border-opacity-10">
+                        <div class="badge bg-warning text-dark fs-6 rounded-circle p-2 px-3 fw-bold">3</div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Campus Handover & Inspection</h6>
+                            <p class="small mb-0 text-white-75">Both students meet at the designated spot, inspect book pages/edition, and hand over the material.</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-start gap-3 bg-white bg-opacity-10 p-3 rounded-3 border border-white border-opacity-10">
+                        <div class="badge bg-warning text-dark fs-6 rounded-circle p-2 px-3 fw-bold">4</div>
+                        <div>
+                            <h6 class="fw-bold mb-1">Confirm Completion</h6>
+                            <p class="small mb-0 text-white-75">Owner clicks 'Confirm Book Handed Over'. Book status updates to 'Completed', keeping the catalogue clean.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick CTA -->
+    <div class="text-center">
+        <a href="{{ url_for('index') }}" class="btn btn-primary px-4 py-2 fw-semibold me-2"><i class="bi bi-search me-1"></i>Browse Materials</a>
+        {% if g.user %}
+            <a href="{{ url_for('create_listing') }}" class="btn btn-outline-success px-4 py-2"><i class="bi bi-plus-circle me-1"></i>Post a Book / Material</a>
+        {% else %}
+            <a href="{{ url_for('register') }}" class="btn btn-outline-primary px-4 py-2"><i class="bi bi-person-plus me-1"></i>Join as Student</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

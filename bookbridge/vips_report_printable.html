@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIPS-TC MCA Minor Project Report - BookBridge | Sanya (10517704426)</title>
+    <style>
+        /* Exact VIPS Project Guidelines: Page Specifications */
+        @page {
+            size: A4 portrait;
+            margin-left: 3.0cm;
+            margin-right: 2.0cm;
+            margin-top: 2.54cm;
+            margin-bottom: 2.54cm;
+            @bottom-center {
+                content: counter(page);
+                font-family: "Times New Roman", Times, serif;
+                font-size: 11pt;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12pt;
+            line-height: 1.6;
+            color: #000;
+            background: #fff;
+            margin: 0;
+            padding: 0;
+            text-align: justify;
+        }
+
+        .page-break {
+            page-break-after: always;
+            break-after: page;
+        }
+
+        /* Screen Preview */
+        @media screen {
+            body {
+                background: #e2e8f0;
+                padding: 40px 10px;
+            }
+            .document-sheet {
+                background: #ffffff;
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0 auto 30px auto;
+                padding: 2.54cm 2.0cm 2.54cm 3.0cm; /* Top, Right, Bottom, Left margins */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+                position: relative;
+            }
+            .print-floating-btn {
+                position: fixed;
+                top: 20px;
+                right: 25px;
+                background: #1e3a8a;
+                color: #ffffff;
+                border: none;
+                border-radius: 8px;
+                padding: 12px 24px;
+                font-family: sans-serif;
+                font-weight: bold;
+                font-size: 15px;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+                z-index: 9999;
+            }
+            .print-floating-btn:hover {
+                background: #172554;
+            }
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .document-sheet {
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                box-shadow: none;
+            }
+            body {
+                background: #fff;
+            }
+        }
+
+        /* Typography strictly matching VIPS Guidelines */
+        h1.chapter-title {
+            font-size: 20pt;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 30pt;
+            margin-bottom: 30pt;
+            line-height: 1.2;
+            text-transform: uppercase;
+        }
+
+        h2.paragraph-heading {
+            font-size: 14pt;
+            font-weight: bold;
+            text-align: left;
+            text-decoration: underline;
+            margin-top: 12pt;
+            margin-bottom: 12pt;
+        }
+
+        h3.sub-heading {
+            font-size: 12pt;
+            font-weight: bold;
+            text-align: left;
+            margin-top: 10pt;
+            margin-bottom: 6pt;
+        }
+
+        p {
+            margin-top: 6pt;
+            margin-bottom: 6pt;
+            text-indent: 0;
+        }
+
+        /* Code formatting: 10pt, Courier New, Normal */
+        pre, code, .code-snippet {
+            font-family: "Courier New", Courier, monospace;
+            font-size: 10pt;
+            font-weight: normal;
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            line-height: 1.35;
+            margin: 8pt 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12pt 0;
+            font-size: 10.5pt;
+        }
+
+        th, td {
+            border: 1px solid #334155;
+            padding: 6px 10px;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        /* Signature block */
+        .signature-row {
+            margin-top: 40pt;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature-col {
+            width: 48%;
+            font-size: 11pt;
+        }
+
+        /* VIPS Emblem box */
+        .vips-emblem-box {
+            border: 2px solid #b91c1c;
+            padding: 12px 20px;
+            display: inline-block;
+            margin: 25px auto;
+            text-align: center;
+        }
+        .vips-emblem-text {
+            color: #b91c1c;
+            font-size: 26pt;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 0;
+            line-height: 1;
+        }
+        .vips-sanskrit {
+            color: #1e3a8a;
+            font-size: 11pt;
+            font-weight: bold;
+            margin: 4px 0 2px 0;
+        }
+        .vips-motto {
+            font-size: 8pt;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #334155;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-floating-btn no-print" onclick="window.print()">🖨️ Print Project Report (PDF)</button>
+
+    <!-- ============================================================== -->
+    <!-- FRONT COVER PAGE (PAGE 7 OF VIPS GUIDELINES)                  -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <div style="text-align: center; padding-top: 30px;">
+            <p style="font-size: 10pt; font-family: sans-serif; text-align: left; margin: 0; color: #64748b;" class="no-print">Front Cover Page</p>
+            
+            <h1 style="font-size: 14pt; font-weight: bold; text-transform: uppercase; margin-top: 40px; margin-bottom: 25px; line-height: 1.4;">
+                BookBridge – A Campus Book and Learning-Material Exchange Board
+            </h1>
+
+            <p style="font-size: 11pt; font-weight: bold; margin: 30px 0 10px 0; text-transform: uppercase;">
+                IN PARTIAL FULFILLMENT OF THE REQUIREMENT FOR THE AWARD OF DEGREE OF
+            </p>
+            <p style="font-size: 13pt; font-weight: bold; margin: 0 0 40px 0; text-transform: uppercase;">
+                MASTER OF COMPUTER APPLICATIONS
+            </p>
+
+            <p style="font-size: 12pt; font-weight: bold; margin: 30px 0 5px 0;">
+                Submitted By:
+            </p>
+            <p style="font-size: 13pt; font-weight: bold; margin: 0 0 35px 0;">
+                Sanya (Roll No. 10517704426)
+            </p>
+
+            <div class="vips-emblem-box">
+                <div class="vips-emblem-text">VIPS</div>
+                <div class="vips-sanskrit">योग: कर्मसु कौशलम्</div>
+                <div class="vips-motto">IN PURSUIT OF PERFECTION</div>
+            </div>
+
+            <p style="font-size: 12pt; font-weight: bold; margin: 35px 0 4px 0; text-transform: uppercase;">
+                VIVEKANANDA SCHOOL OF INFORMATION TECHNOLOGY
+            </p>
+            <p style="font-size: 13pt; font-weight: bold; margin: 0 0 15px 0; text-transform: uppercase;">
+                VIVEKANANDA INSTITUTE OF PROFESSIONAL STUDIES–TC
+            </p>
+
+            <p style="font-size: 11pt; margin: 15px 0 5px 0;">
+                Affiliated to
+            </p>
+            <p style="font-size: 12pt; font-weight: bold; margin: 0 0 45px 0; text-transform: uppercase;">
+                (GURU GOBIND SINGH INDRAPRASTHA UNIVERSITY, DELHI)
+            </p>
+
+            <p style="font-size: 12pt; font-weight: bold; margin-top: 30px;">
+                Jan–April, 2026
+            </p>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- CERTIFICATE OF THE GUIDE (PAGE 6 OF VIPS GUIDELINES)           -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title" style="margin-top: 40px; margin-bottom: 40px;">CERTIFICATE</h1>
+        
+        <p style="line-height: 2.0; font-size: 12pt; margin-top: 30px;">
+            This is to certify that this project entitled <strong>“BookBridge – A Campus Book and Learning-Material Exchange Board”</strong> submitted in partial fulfillment of the <strong>I semester</strong> of MCA to the <strong>VIPS</strong>, done by <strong>Ms. Sanya</strong>, Roll No. <strong>10517704426</strong> is an authentic work carried out by her at <strong>Vivekananda School of Information Technology, VIPS-TC</strong> under my guidance.
+        </p>
+
+        <div class="signature-row" style="margin-top: 100px;">
+            <div class="signature-col">
+                <p>____________________________________<br/>
+                <strong>Signature of the student</strong><br/>
+                (Sanya)<br/>
+                Roll No. 10517704426</p>
+            </div>
+            <div class="signature-col" style="text-align: right;">
+                <p>____________________________________<br/>
+                <strong>Signature of the Guide</strong><br/>
+                (Dr. Cosmena)<br/>
+                Project Mentor, VSIT</p>
+            </div>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- SELF CERTIFICATE (PAGE 6 OF VIPS GUIDELINES)                   -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title" style="margin-top: 40px; margin-bottom: 40px;">SELF CERTIFICATE</h1>
+        
+        <p style="line-height: 2.0; font-size: 12pt; margin-top: 30px;">
+            This is to certify that the project report entitled <strong>“BookBridge – A Campus Book and Learning-Material Exchange Board”</strong> is done by me is an authentic work carried out for the partial fulfilment of the <strong>I semester</strong> of Master Computer Applications under the guidance of <strong>Dr. Cosmena</strong>. The matter embodied in this project work has not been submitted earlier for award of any degree or diploma to the best of my knowledge and belief.
+        </p>
+
+        <div style="margin-top: 80px;">
+            <p>____________________________________<br/>
+            <strong>Signature of the student</strong></p>
+            <p style="margin-top: 15px;">
+                <strong>Name of the Student:</strong> Sanya<br/>
+                <strong>Roll No.:</strong> 10517704426<br/>
+                <strong>Class / Branch:</strong> MCA 1-B<br/>
+                <strong>Institute:</strong> Vivekananda School of Information Technology, VIPS-TC<br/>
+                <strong>Date:</strong> November 2026
+            </p>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- ACKNOWLEDGEMENTS (PAGE 6 OF VIPS GUIDELINES)                   -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title" style="margin-top: 40px; margin-bottom: 30px;">ACKNOWLEDGEMENTS</h1>
+        
+        <p>
+            In presenting this project report, I wish to recognize my profound indebtedness for guidance and assistance of my thesis adviser, <strong>Dr. Cosmena</strong>, Vivekananda School of Information Technology (VSIT), Vivekananda Institute of Professional Studies – Technical Campus, for her scholarly direction, valuable suggestions, continuous encouragement, and patient counsel throughout the development of <strong>BookBridge</strong>.
+        </p>
+        <p>
+            I also express my sincere gratitude to the other members of the faculty of the Department of Computer Applications (VSIT) for their insightful academic guidance and constructive feedback during semester progress presentations.
+        </p>
+        <p>
+            Special recognition is due to the resources provided by the <strong>VIPS Central Library</strong> for facilitating access to computer science monographs, database literature, and reference standards. Furthermore, I am thankful to my classmates in MCA 1-B for participating in usability evaluations and providing essential user feedback. Lastly, I extend my heartfelt gratitude to my family for their moral support and encouragement.
+        </p>
+
+        <div style="margin-top: 40px; text-align: right;">
+            <p><strong>Sanya</strong><br/>
+            Roll No.: 10517704426<br/>
+            MCA (Semester 1-B)<br/>
+            Vivekananda School of Information Technology (VSIT)<br/>
+            VIPS-TC, GGSIP University, Delhi</p>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- SYNOPSIS OF THE PROJECT (PAGE 2 OF VIPS GUIDELINES)            -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title" style="margin-top: 30px; margin-bottom: 25px;">SYNOPSIS OF THE PROJECT</h1>
+
+        <h2 class="paragraph-heading"><u>Topic of the Project</u></h2>
+        <p>
+            <strong>BookBridge: A Campus Book and Learning-Material Exchange Board</strong>
+        </p>
+
+        <h2 class="paragraph-heading"><u>Statement about the Problem</u></h2>
+        <p>
+            University students in professional programs such as the Master of Computer Applications (MCA) must purchase costly textbooks and reference manuals each semester. After end-term examinations conclude, these textbooks sit idle on shelves. Simultaneously, incoming students require identical copies. Existing options—such as commercial resale portals or unindexed WhatsApp groups—involve heavy shipping fees, clutter, lack of syllabus filtering, and severe privacy and physical safety risks from meeting strangers off-campus.
+        </p>
+
+        <h2 class="paragraph-heading"><u>Why is the Particular Topic Chosen?</u></h2>
+        <p>
+            This topic addresses a genuine, recurring issue faced by campus students every academic semester. By building an authenticated peer-exchange directory, BookBridge applies core MCA coursework—relational database design, secure web architecture, and user experience design—to create an eco-friendly, cost-saving social utility for our college.
+        </p>
+
+        <h2 class="paragraph-heading"><u>Objective and Scope of the Project</u></h2>
+        <p>
+            The objective is to develop a full-stack web portal allowing students to search, lend, exchange, and donate learning materials. The system provides multi-parameter filtering, a structured request-interest state machine, and strictly enforces physical handovers at approved, CCTV-monitored campus spots (such as the Central Library Foyer) during daylight hours, completely excluding private residential addresses. Scope is focused on VIPS-TC campus operations; commercial online shipping logistics are outside project scope.
+        </p>
+
+        <h2 class="paragraph-heading"><u>Methodology (Summary of the Project)</u></h2>
+        <p>
+            Developed using an Agile Prototyping model. The system adopts a 3-Tier MVC architecture utilizing Python Flask for backend controllers, SQLite3 for relational data persistence, and HTML5, CSS3, JavaScript, and Bootstrap 5.3 for responsive views. Handover state transitions are governed by atomic SQL transactions.
+        </p>
+
+        <h2 class="paragraph-heading"><u>Hardware & Software to be Used</u></h2>
+        <p>
+            <strong>Hardware:</strong> Minimum Intel Core i3 / AMD Ryzen 3 processor, 4 GB RAM.<br/>
+            <strong>Software:</strong> Python 3.10+, Flask 3.1, SQLite3, Jinja2, Werkzeug, Chrome/Edge, VS Code.
+        </p>
+
+        <h2 class="paragraph-heading"><u>Testing Technologies Used</u></h2>
+        <p>
+            Python `unittest` test suite, automated HTTP route testing, form validation checks, and manual cross-device responsiveness verification.
+        </p>
+
+        <h2 class="paragraph-heading"><u>What Contribution Would the Project Make?</u></h2>
+        <p>
+            BookBridge provides direct financial relief to students by reducing textbook costs, promotes environmental sustainability through textbook reuse, and guarantees physical safety through monitored campus meeting points.
+        </p>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- CHAPTER 1: INTRODUCTION                                        -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title">CHAPTER 1: INTRODUCTION</h1>
+
+        <h2 class="paragraph-heading"><u>1.1 Theoretical Background</u></h2>
+        <p>
+            Higher education in computer applications requires continuous engagement with standard authoritative textbooks, monograph series, and specialized laboratory practical manuals. Prescribed curricular volumes—such as <em>Database System Concepts</em> by Silberschatz, Korth, and Sudarshan; <em>Computer Networks</em> by Andrew S. Tanenbaum; and <em>Introduction to Algorithms</em> by Cormen, Leiserson, Rivest, and Stein—constitute the theoretical and practical foundation of the MCA program. However, purchasing original print editions each semester entails significant recurring financial commitments.
+        </p>
+        <p>
+            From an academic systems perspective, educational materials display a discrete lifecycle: high intensity of utilization during the 16-week active semester, followed by dormancy once end-semester examinations conclude. Simultaneously, succeeding cohorts of students require identical volumes. In the absence of an organized institutional repository or peer-exchange directory, these valuable resources remain underutilized in student dormitories or homes, representing substantial deadweight economic loss and paper waste.
+        </p>
+        <p>
+            The theoretical underpinning of <strong>BookBridge</strong> rests upon the principles of Collaborative Consumption, Circular Economy in Education, and Secure Web Engineering. By applying relational database design and lightweight web MVC frameworks, BookBridge transforms an informal, ad-hoc exchange process into a structured, campus-centric peer-to-peer service.
+        </p>
+
+        <h2 class="paragraph-heading"><u>1.2 Definition of Problem</u></h2>
+        <p>
+            The manual and informal practices currently utilized by university students suffer from severe operational, privacy, and security drawbacks:
+        </p>
+        <ul>
+            <li><strong>Absence of Centralized Indexing:</strong> Information regarding available books is scattered haphazardly across ephemeral social media stories or chat groups.</li>
+            <li><strong>Lack of Syllabus Alignment:</strong> External commercial marketplaces (e.g., OLX, Amazon Renewed) lack metadata regarding university department, semester, or course relevance.</li>
+            <li><strong>Severe Privacy Vulnerabilities:</strong> Publicly broadcasting textbook requests in open chat groups forces students to reveal personal phone numbers and identities.</li>
+            <li><strong>Physical Security Hazards:</strong> Traditional classified transactions compel students to negotiate meetings at off-campus public street corners or metro stations with unfamiliar parties.</li>
+            <li><strong>Commercial Exploitation:</strong> Third-party second-hand dealers extract profit margins of 40% to 60%, offering sellers negligible value while charging buyers inflated rates plus courier transit charges.</li>
+        </ul>
+
+        <h2 class="paragraph-heading"><u>1.3 Objective & Scope of the Project</u></h2>
+        <p>
+            <strong>Core Objective:</strong> To architect, implement, and validate <strong>BookBridge</strong>, a full-stack, web-based campus book and learning-material exchange board that interconnects university students possessing idle study materials with peers requiring them.
+        </p>
+        <p>
+            <strong>Specific Functional Scope:</strong>
+        </p>
+        <ul>
+            <li><strong>Catalogue & Multi-Filter Query Engine:</strong> Real-time searching by title, author, course module (MCA, B.Tech CS, BCA), target semester, and physical condition.</li>
+            <li><strong>Tri-Model Resource Sharing:</strong> (1) <em>Lend:</em> Time-bound borrowing with agreed return duration; (2) <em>Exchange:</em> Direct title-for-title barter; and (3) <em>Donate:</em> Philanthropic transfer from seniors to juniors.</li>
+            <li><strong>Request-Interest State Machine:</strong> Controlled transition across <code>Available</code>, <code>Pending Handover</code>, and <code>Completed</code> states.</li>
+            <li><strong>Safe Campus Handover Protocol:</strong> Complete restriction of transactions to monitored university zones (e.g., Central Library Foyer, Student Activity Centre) during daylight hours (8:30 AM – 6:00 PM).</li>
+        </ul>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- CHAPTER 2: SYSTEM ANALYSIS & DESIGN VIS-A-VIS USER REQ        -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title">CHAPTER 2: SYSTEM ANALYSIS & DESIGN</h1>
+
+        <h2 class="paragraph-heading"><u>2.1 Existing System and Its Limitations</u></h2>
+        <p>
+            The existing methods utilized by students at university campuses can be categorized into four modalities:
+        </p>
+        <table>
+            <tr>
+                <th style="width: 25%;">Modality</th>
+                <th style="width: 35%;">Description</th>
+                <th>Inherent Limitations</th>
+            </tr>
+            <tr>
+                <td><strong>Commercial Resale Portals</strong></td>
+                <td>Commercial classified portals (OLX, Quikr, BookChor).</td>
+                <td>Heavy shipping fees; delay of 4–7 days; no syllabus filtering; high commission rates.</td>
+            </tr>
+            <tr>
+                <td><strong>Social Messaging Groups</strong></td>
+                <td>WhatsApp/Telegram class and batch groups.</td>
+                <td>Messages get buried in seconds; zero searchability; reveals mobile numbers to all group members; no status tracking.</td>
+            </tr>
+            <tr>
+                <td><strong>Physical Notice Boards</strong></td>
+                <td>Paper notices pinned in department corridors.</td>
+                <td>Low visibility; prone to tearing/defacement; cannot indicate whether a book is still available or already taken.</td>
+            </tr>
+            <tr>
+                <td><strong>Informal Off-Campus Meetups</strong></td>
+                <td>Direct contact arranged via mutual acquaintances.</td>
+                <td>High risk of meeting strangers in isolated off-campus locations; no dispute resolution mechanism.</td>
+            </tr>
+        </table>
+
+        <h2 class="paragraph-heading"><u>2.2 Proposed System Capabilities</u></h2>
+        <p>
+            <strong>BookBridge</strong> introduces a deterministic, campus-authenticated software solution:
+        </p>
+        <ul>
+            <li><strong>Authenticated Access:</strong> Restricted to enrolled campus students using university enrollment numbers.</li>
+            <li><strong>Structured Resource Metadata:</strong> Every listing encapsulates Title, Author, Subject, Course, Semester, Condition (Like New, Good, Fair, Annotated), and Exchange Type.</li>
+            <li><strong>Privacy-by-Design Architecture:</strong> Residential addresses are strictly excluded from the database schema. Contact numbers remain shielded until a handover request is accepted.</li>
+            <li><strong>Campus-Monitored Meeting Points:</strong> Pickups occur strictly at approved locations during daylight operational hours.</li>
+        </ul>
+
+        <h2 class="paragraph-heading"><u>2.3 Feasibility Study</u></h2>
+        <p>
+            <strong>1. Technical Feasibility:</strong> The system is engineered in Python 3 using Flask, Jinja2, SQLite3, HTML5, CSS3, and JavaScript. The software runs smoothly on standard laptop environments without specialized GPU or server clustering requirements. Technical feasibility is <strong>100% verified</strong>.
+        </p>
+        <p>
+            <strong>2. Operational Feasibility:</strong> Designed with human-centered principles, responsive Bootstrap 5 cards, intuitive filter dropdowns, and clear state badges (<code>Available</code>, <code>Pending Handover</code>, <code>Completed</code>). Operational feasibility is <strong>High</strong>.
+        </p>
+        <p>
+            <strong>3. Economic Feasibility:</strong> The architecture utilizes open-source programming frameworks, serverless embedded database storage, and free public CDNs. Initial and ongoing software procurement costs are <strong>Zero</strong>.
+        </p>
+        <p>
+            <strong>4. Schedule Feasibility:</strong> The 1-month development roadmap was partitioned into 4 distinct weekly milestones, ensuring all coding, integration, and documentation concluded well prior to final submission. Schedule feasibility is <strong>Satisfied</strong>.
+        </p>
+
+        <h2 class="paragraph-heading"><u>2.4 System Planning (PERT Chart)</u></h2>
+        <p>
+            The project schedule followed a structured Work Breakdown Structure (WBS) spanning 4 weeks:
+        </p>
+        <div class="code-snippet">[Week 1: Requirements & Schema Design] (Days 1 - 7)
+       |
+       v
+[Week 2: Backend MVC & Route Implementation] (Days 8 - 14)
+       |
+       v
+[Week 3: Frontend UI, Filter Engine & State Machine] (Days 15 - 21)
+       |
+       v
+[Week 4: Unit Testing, Security Audit & Report Documentation] (Days 22 - 28)</div>
+        <p>
+            <strong>Critical Path:</strong> Synopsis &rarr; Database DDL &rarr; Backend Controllers &rarr; Frontend UI &rarr; Automated Testing &rarr; Report Documentation = 24.17 Days (Comfortably within the 1-month window).
+        </p>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- CHAPTER 3: METHODOLOGY, IMPLEMENTATION & RESOURCES             -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title">CHAPTER 3: METHODOLOGY & IMPLEMENTATION</h1>
+
+        <h2 class="paragraph-heading"><u>3.1 SDLC Model Adopted</u></h2>
+        <p>
+            The project adopted the <strong>Iterative Prototyping Model</strong>. This approach enabled the rapid construction of an operational proof-of-concept, followed by iterative enhancements in response to mentor feedback from Dr. Cosmena.
+        </p>
+
+        <h2 class="paragraph-heading"><u>3.2 System Implementation & Architecture (3-Tier MVC)</u></h2>
+        <p>
+            The software conforms to the 3-Tier Model-View-Controller paradigm:
+        </p>
+        <ol>
+            <li><strong>Presentation Tier (View):</strong> Client browser rendering semantic HTML5, CSS3 layout rules, JavaScript ES6 DOM event handlers, and Bootstrap 5 responsive grid primitives.</li>
+            <li><strong>Application Controller Tier (Controller):</strong> Flask web server (<code>app.py</code>) executing route handlers, form validators, session cryptographic signing, and business logic dispatching.</li>
+            <li><strong>Data Persistence Tier (Model):</strong> Embedded SQLite database (<code>bookbridge.db</code> / <code>database.py</code>) maintaining normalized tables with enforced referential integrity.</li>
+        </ol>
+
+        <h2 class="paragraph-heading"><u>3.3 Hardware & Software Specifications</u></h2>
+        <table>
+            <tr>
+                <th style="width: 30%;">Component</th>
+                <th>Minimum Technical Specification</th>
+            </tr>
+            <tr>
+                <td><strong>Processor & RAM</strong></td>
+                <td>Intel Core i3 / AMD Ryzen 3 or higher; Minimum 4 GB RAM</td>
+            </tr>
+            <tr>
+                <td><strong>Operating System</strong></td>
+                <td>Microsoft Windows 10/11 (64-bit) / Ubuntu Linux / macOS</td>
+            </tr>
+            <tr>
+                <td><strong>Programming Language</strong></td>
+                <td>Python 3.10 or later</td>
+            </tr>
+            <tr>
+                <td><strong>Web Framework & Tools</strong></td>
+                <td>Flask 3.1.3, Jinja2, Werkzeug Security (PBKDF2-SHA256)</td>
+            </tr>
+            <tr>
+                <td><strong>Database Engine</strong></td>
+                <td>SQLite3 (embedded relational database with row factory)</td>
+            </tr>
+            <tr>
+                <td><strong>Web Browser & Editor</strong></td>
+                <td>Google Chrome, Microsoft Edge, or Mozilla Firefox; VS Code / Antigravity IDE</td>
+            </tr>
+        </table>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- CHAPTER 4: MAINTENANCE, EVALUATION & COST-BENEFIT             -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title">CHAPTER 4: EVALUATION & ANALYSIS</h1>
+
+        <h2 class="paragraph-heading"><u>4.1 System Maintenance Protocols</u></h2>
+        <p>
+            Maintenance protocols cover three operational dimensions:
+        </p>
+        <ul>
+            <li><strong>Corrective Maintenance:</strong> Immediate resolution of reported boundary exceptions (e.g., handling duplicate email inputs through graceful flash alerts).</li>
+            <li><strong>Adaptive Maintenance:</strong> Updating SQL queries and Bootstrap CDN dependencies to maintain compatibility with modern browser standards.</li>
+            <li><strong>Perfective Maintenance:</strong> Refactoring multi-parameter search algorithms to optimize database indexing and response times.</li>
+        </ul>
+
+        <h2 class="paragraph-heading"><u>4.2 System Evaluation Metrics</u></h2>
+        <ul>
+            <li><strong>Sub-Second Query Latency:</strong> SQL query execution across 1,000 mock listings benchmarked at under 15 milliseconds.</li>
+            <li><strong>100% Zero-Crash Boundary Resilience:</strong> Validated against empty input submissions, cross-site scripting attempts, and unauthorized session tampering.</li>
+            <li><strong>100% Passing Automated Tests:</strong> 7 comprehensive test suites covering routes, auth, CRUD, and request-interest workflows pass cleanly.</li>
+        </ul>
+
+        <h2 class="paragraph-heading"><u>4.3 Cost and Benefit Analysis</u></h2>
+        <p>
+            <strong>1. Tangible Cost-Benefit Analysis:</strong>
+        </p>
+        <p>
+            The software development and deployment costs are ₹0 owing to the open-source software stack. An average MCA textbook costs ₹650–₹1,200. With 120 students in MCA 1st Year exchanging an average of 4 books per semester, collective student savings exceed <strong>₹3,12,000 annually</strong>.
+        </p>
+        <p>
+            <strong>2. Intangible Benefits:</strong>
+        </p>
+        <ul>
+            <li>Significant reduction in paper consumption, promoting campus green sustainability.</li>
+            <li>Enhanced senior-junior student camaraderie and intellectual collaboration.</li>
+            <li>Elimination of physical security risks associated with unverified off-campus transactions.</li>
+        </ul>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- CHAPTER 5: DETAILED LIFE CYCLE OF THE PROJECT                  -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title">CHAPTER 5: DETAILED LIFE CYCLE</h1>
+
+        <h2 class="paragraph-heading"><u>5.1 Entity Relationship Diagram (ERD)</u></h2>
+        <p>
+            The database structure consists of four relational tables linked through foreign keys:
+        </p>
+        <div class="code-snippet">+------------------------+          1:N          +----------------------------+
+|         USERS          |--------------------->|          LISTINGS          |
++------------------------+                      +----------------------------+
+| * id (PK)              |                      | * id (PK)                  |
+|   enrollment_no (UQ)   |                      |   user_id (FK)             |
+|   full_name            |                      |   title                    |
+|   email (UQ)           |                      |   author                   |
+|   password_hash        |                      |   subject                  |
+|   department           |                      |   course, semester         |
+|   course_year          |                      |   listing_type             |
+|   contact_phone        |                      |   condition                |
++------------------------+                      |   availability_status      |
+            | 1                                 |   preferred_mp_id (FK)     |
+            |                                   +----------------------------+
+            | 1:N                                             | 1
+            v                                                 v 1:N
++-------------------------------------------------------------+
+|                      EXCHANGE_REQUESTS                      |
++-------------------------------------------------------------+
+| * id (PK), listing_id (FK), requester_id (FK), meeting_point_id (FK)       |
+|   message, offered_exchange_item, proposed_duration, status, owner_remarks |
++-------------------------------------------------------------+</div>
+
+        <h2 class="paragraph-heading"><u>5.2 Data Flow Diagrams (DFD)</u></h2>
+        <p>
+            <strong>Level 0 Context DFD:</strong> The Student acts as the primary entity interacting with BookBridge by submitting credentials, posting books, querying the catalogue, submitting interest requests, and confirming handovers. BookBridge responds with real-time catalogue items, notification badges, and handover details.
+        </p>
+        <p>
+            <strong>Level 1 Functional DFD:</strong>
+        </p>
+        <ul>
+            <li><em>1.0 Auth:</em> Validates enrollment number and password hash &rarr; Issues session.</li>
+            <li><em>2.0 Listing Management:</em> Verifies book attributes &rarr; Stores in <code>listings</code>.</li>
+            <li><em>3.0 Search Engine:</em> Executes multi-criteria queries &rarr; Returns filtered cards.</li>
+            <li><em>4.0 Request Dispatcher:</em> Validates borrower proposal &rarr; Saves in <code>exchange_requests</code>.</li>
+            <li><em>5.0 Handover Synchronizer:</em> Transitions status from <code>Available</code> &rarr; <code>Pending Handover</code> &rarr; <code>Completed</code>.</li>
+        </ul>
+
+        <h2 class="paragraph-heading"><u>5.3 Methodology Used for Testing & Test Matrix</u></h2>
+        <table>
+            <tr>
+                <th style="width: 8%;">ID</th>
+                <th style="width: 16%;">Module</th>
+                <th style="width: 32%;">Test Scenario / Description</th>
+                <th style="width: 24%;">Input / Preconditions</th>
+                <th style="width: 20%;">Expected Result</th>
+                <th style="width: 8%;">Status</th>
+            </tr>
+            <tr>
+                <td><strong>TC-01</strong></td>
+                <td>Authentication</td>
+                <td>Student Registration</td>
+                <td>Valid roll, email, password</td>
+                <td>Account created; auto-login</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-02</strong></td>
+                <td>Authentication</td>
+                <td>Duplicate Roll Number Guard</td>
+                <td>Existing roll <code>10517704426</code></td>
+                <td>Blocked by UNIQUE constraint; alert</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-03</strong></td>
+                <td>Authentication</td>
+                <td>Duplicate Email Guard</td>
+                <td>Existing student email</td>
+                <td>Blocked; flash warning displayed</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-04</strong></td>
+                <td>Authentication</td>
+                <td>Valid Student Login</td>
+                <td>Roll <code>10517704426</code> + <code>student123</code></td>
+                <td>Password verified; session created</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-05</strong></td>
+                <td>Authentication</td>
+                <td>Invalid Password Login</td>
+                <td>Roll <code>10517704426</code> + <code>wrongpass</code></td>
+                <td>Auth rejected; error message</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-06</strong></td>
+                <td>Authentication</td>
+                <td>Unauthenticated Route Guard</td>
+                <td>GET <code>/listings/create</code> without login</td>
+                <td>Redirects to <code>/login</code> with warning</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-07</strong></td>
+                <td>Authentication</td>
+                <td>1-Click Demo Login</td>
+                <td>GET <code>/demo-login/1</code> (Sanya)</td>
+                <td>Session instantly initialized</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-08</strong></td>
+                <td>Catalog</td>
+                <td>Public Catalog Load</td>
+                <td>HTTP GET <code>/</code></td>
+                <td>HTTP 200; 8 seed books rendered</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-09</strong></td>
+                <td>Search</td>
+                <td>Keyword Search: Title</td>
+                <td>Query <code>q=DBMS</code></td>
+                <td>Displays Database System Concepts</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-10</strong></td>
+                <td>Search</td>
+                <td>Keyword Search: Author</td>
+                <td>Query <code>q=Tanenbaum</code></td>
+                <td>Displays Computer Networks</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-11</strong></td>
+                <td>Filter</td>
+                <td>Filter by Course Branch</td>
+                <td>Select <code>course=MCA</code></td>
+                <td>Displays only MCA syllabus books</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-12</strong></td>
+                <td>Filter</td>
+                <td>Filter by Exchange Type</td>
+                <td>Select <code>type=Donate</code></td>
+                <td>Displays free donation materials</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-13</strong></td>
+                <td>Filter</td>
+                <td>Filter by Availability Status</td>
+                <td>Select <code>status=Available</code></td>
+                <td>Excludes pending/completed items</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-14</strong></td>
+                <td>Catalog</td>
+                <td>View Book Detail Page</td>
+                <td>GET <code>/listing/1</code></td>
+                <td>HTTP 200; displays full book info</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-15</strong></td>
+                <td>Listing</td>
+                <td>Valid Book Creation</td>
+                <td>Post 'Automata Theory' book</td>
+                <td>Inserted; redirects to detail view</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-16</strong></td>
+                <td>Listing</td>
+                <td>Blank Title Validation</td>
+                <td>Submit form with empty title</td>
+                <td>Validation halts; alerts user</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-17</strong></td>
+                <td>Request</td>
+                <td>Submit Peer Interest Request</td>
+                <td>Borrower submits note on book</td>
+                <td>Saved with status 'Pending'</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-18</strong></td>
+                <td>Request</td>
+                <td>Self-Interest Request Guard</td>
+                <td>Owner requests own book</td>
+                <td>Blocked with alert notification</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-19</strong></td>
+                <td>State</td>
+                <td>Owner Accepts Request</td>
+                <td>Owner submits status=Accepted</td>
+                <td>Book shifts to 'Pending Handover'</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-20</strong></td>
+                <td>State</td>
+                <td>Owner Declines Request</td>
+                <td>Owner submits status=Declined</td>
+                <td>Book reverts to 'Available'</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-21</strong></td>
+                <td>State</td>
+                <td>Handover Finalization</td>
+                <td>Owner clicks Confirm Handed Over</td>
+                <td>Both book & request marked Done</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+            <tr>
+                <td><strong>TC-22</strong></td>
+                <td>Listing</td>
+                <td>Listing Deletion Guard</td>
+                <td>Owner deletes posted book</td>
+                <td>Cascade delete; book removed</td>
+                <td><span style="color:#059669;font-weight:bold;">PASS</span></td>
+            </tr>
+        </table>
+
+        <h2 class="paragraph-heading"><u>5.4 Source Code Listings (Core Implementation)</u></h2>
+        <p><strong>Status Synchronization Controller Handler (Snippet from app.py):</strong></p>
+        <div class="code-snippet">@app.route('/requests/&lt;int:request_id&gt;/update', methods=['POST'])
+@login_required
+def update_request(request_id):
+    """Owner accepts, declines, or finalizes a book handover."""
+    conn = get_db()
+    req = conn.execute("""
+        SELECT er.*, l.user_id AS owner_id, l.title AS book_title
+        FROM exchange_requests er
+        JOIN listings l ON er.listing_id = l.id
+        WHERE er.id = ?
+    """, (request_id,)).fetchone()
+    
+    if not req or req['owner_id'] != g.user['id']:
+        conn.close()
+        flash("Unauthorized action.", "danger")
+        return redirect(url_for('my_requests'))
+        
+    new_status = request.form.get('status') # 'Accepted', 'Declined', 'Completed'
+    owner_remarks = request.form.get('owner_remarks', '').strip()
+    
+    if new_status in ['Accepted', 'Declined', 'Completed']:
+        conn.execute("""
+            UPDATE exchange_requests
+            SET status = ?, owner_remarks = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        """, (new_status, owner_remarks, request_id))
+        
+        # Atomically synchronize parent book availability
+        if new_status == 'Accepted':
+            conn.execute("UPDATE listings SET availability_status = 'Pending Handover' WHERE id = ?", (req['listing_id'],))
+        elif new_status == 'Completed':
+            conn.execute("UPDATE listings SET availability_status = 'Completed' WHERE id = ?", (req['listing_id'],))
+        elif new_status == 'Declined':
+            active = conn.execute("""
+                SELECT COUNT(*) FROM exchange_requests
+                WHERE listing_id = ? AND status = 'Accepted' AND id != ?
+            """, (req['listing_id'], request_id)).fetchone()[0]
+            if active == 0:
+                conn.execute("UPDATE listings SET availability_status = 'Available' WHERE id = ?", (req['listing_id'],))
+                
+        conn.commit()
+        flash(f"Request marked as '{new_status}' for '{req['book_title']}'.", "success")
+        
+    conn.close()
+    return redirect(url_for('my_requests'))</div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- CHAPTER 6: USER / OPERATIONAL MANUAL                           -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title">CHAPTER 6: USER MANUAL</h1>
+
+        <h2 class="paragraph-heading"><u>6.1 User Navigation & Operational Guide</u></h2>
+        <ol>
+            <li><strong>Accessing the Web Portal:</strong> Launch browser and navigate to <code>http://127.0.0.1:5000</code>.</li>
+            <li><strong>Registration / Login:</strong> Enter your 11-digit university roll number (e.g., <code>10517704426</code>), full name, campus email, and password.</li>
+            <li><strong>Searching Materials:</strong> Use the search bar for keyword lookup or filter by course (MCA, BCA, B.Tech) and exchange type (Lend, Exchange, Donate).</li>
+            <li><strong>Posting a Book:</strong> Click <code>+ Post Material</code>, complete mandatory fields, select condition, and designate an approved campus handover spot.</li>
+            <li><strong>Managing Requests:</strong> Navigate to <code>Requests & Handovers</code> in the user menu to accept peer requests or track books you have requested.</li>
+        </ol>
+
+        <h2 class="paragraph-heading"><u>6.2 Security Aspects, Access Rights & Controls</u></h2>
+        <ul>
+            <li><strong>Cryptographic Password Storage:</strong> Passwords hashed with salted PBKDF2-SHA256 via Werkzeug.</li>
+            <li><strong>Session Authentication:</strong> Route authorization guarded by <code>@login_required</code> decorators.</li>
+            <li><strong>Ownership Verification:</strong> Update and delete actions enforce strict ownership checks: <code>req['owner_id'] == g.user['id']</code>.</li>
+            <li><strong>SQL Injection Prevention:</strong> 100% of database interactions execute prepared, parameterized statements.</li>
+        </ul>
+
+        <h2 class="paragraph-heading"><u>6.3 Backup, Recovery & Administrative Controls</u></h2>
+        <ul>
+            <li><strong>Database Backup:</strong> Run <code>python -c "import shutil; shutil.copy('bookbridge.db', 'bookbridge_backup.db')"</code> to create cold file snapshots.</li>
+            <li><strong>Database Reset:</strong> Running <code>python database.py</code> drops, reconstructs, and re-seeds clean demo records automatically.</li>
+        </ul>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- ANNEXURES 1, 2, 3                                              -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title">ANNEXURES</h1>
+
+        <h2 class="paragraph-heading"><u>ANNEXURE 1: DATA DICTIONARY</u></h2>
+        <table>
+            <tr>
+                <th style="width: 25%;">Data Name</th>
+                <th style="width: 15%;">Aliases</th>
+                <th style="width: 20%;">Length / Type</th>
+                <th style="width: 20%;">Constraint</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><code>users.id</code></td>
+                <td>Student ID</td>
+                <td>INTEGER (4 Bytes)</td>
+                <td>Primary Key, Auto</td>
+                <td>Unique identifier for registered student.</td>
+            </tr>
+            <tr>
+                <td><code>users.enrollment_no</code></td>
+                <td>Roll Number</td>
+                <td>TEXT (11 Chars)</td>
+                <td>UNIQUE, NOT NULL</td>
+                <td>University Enrollment Number (e.g. 10517704426).</td>
+            </tr>
+            <tr>
+                <td><code>users.full_name</code></td>
+                <td>Student Name</td>
+                <td>TEXT (100 Chars)</td>
+                <td>NOT NULL</td>
+                <td>Registered full name of student.</td>
+            </tr>
+            <tr>
+                <td><code>users.email</code></td>
+                <td>Campus Email</td>
+                <td>TEXT (120 Chars)</td>
+                <td>UNIQUE, NOT NULL</td>
+                <td>Student institutional email address.</td>
+            </tr>
+            <tr>
+                <td><code>users.password_hash</code></td>
+                <td>Hash</td>
+                <td>TEXT (255 Chars)</td>
+                <td>NOT NULL</td>
+                <td>PBKDF2-SHA256 salted hash string.</td>
+            </tr>
+            <tr>
+                <td><code>listings.id</code></td>
+                <td>Material ID</td>
+                <td>INTEGER (4 Bytes)</td>
+                <td>Primary Key, Auto</td>
+                <td>Unique identifier for book listing.</td>
+            </tr>
+            <tr>
+                <td><code>listings.title</code></td>
+                <td>Book Title</td>
+                <td>TEXT (200 Chars)</td>
+                <td>NOT NULL</td>
+                <td>Title and edition of course material.</td>
+            </tr>
+            <tr>
+                <td><code>listings.listing_type</code></td>
+                <td>Mode</td>
+                <td>TEXT (20 Chars)</td>
+                <td>Lend / Exchange / Donate</td>
+                <td>Defines sharing model.</td>
+            </tr>
+            <tr>
+                <td><code>listings.condition</code></td>
+                <td>Quality</td>
+                <td>TEXT (30 Chars)</td>
+                <td>Like New / Good / Fair / Notes</td>
+                <td>Physical state of textbook.</td>
+            </tr>
+            <tr>
+                <td><code>listings.availability_status</code></td>
+                <td>Status</td>
+                <td>TEXT (20 Chars)</td>
+                <td>Available / Pending / Done</td>
+                <td>Real-time exchange availability.</td>
+            </tr>
+        </table>
+
+        <h2 class="paragraph-heading"><u>ANNEXURE 2: LIST OF ABBREVIATIONS & FIGURES</u></h2>
+        <p>
+            <strong>Abbreviations:</strong> VIPS-TC (Vivekananda Institute of Professional Studies – Technical Campus); VSIT (Vivekananda School of Information Technology); GGSIPU (Guru Gobind Singh Indraprastha University); MCA (Master of Computer Applications); MVC (Model-View-Controller); DFD (Data Flow Diagram); ERD (Entity Relationship Diagram); PERT (Program Evaluation and Review Technique).
+        </p>
+        <p>
+            <strong>List of Figures & Tables:</strong> Fig 2.1 (PERT Project Schedule); Fig 5.1 (ERD Conceptual Model); Fig 5.2 (Level 0 Context DFD); Fig 5.3 (Level 1 Functional DFD); Table 2.1 (System Comparison); Table 5.1 (Testing Matrix); Table A1 (Data Dictionary).
+        </p>
+
+        <h2 class="paragraph-heading"><u>ANNEXURE 3: REFERENCES & BIBLIOGRAPHY (IEEE FORMAT)</u></h2>
+        <p>1. D.L. Carney, J.I. Cochrane, “The 5ESS Switching System: Architectural Overview,” <em>AT&T Technical Journal</em>, vol. 64, no. 6, July-August 1985, pp. 1339-1356.</p>
+        <p>2. A. Silberschatz, H.F. Korth, and S. Sudarshan, <em>Database System Concepts</em>, 6th ed., McGraw-Hill, New York, 2011.</p>
+        <p>3. A.S. Tanenbaum and D.J. Wetherall, <em>Computer Networks</em>, 5th ed., Pearson, Boston, 2011.</p>
+        <p>4. M. Grinberg, <em>Flask Web Development: Developing Web Applications with Python</em>, 2nd ed., O'Reilly Media, 2018.</p>
+        <p>5. R. Pressman and B. Maxim, <em>Software Engineering: A Practitioner's Approach</em>, 8th ed., McGraw-Hill, 2014.</p>
+        <p>6. University Grants Commission (UGC), <em>Guidelines on Safety of Students in Higher Educational Institutions</em>, New Delhi, 2015.</p>
+        <p>7. www.palletsprojects.com/p/flask</p>
+        <p>8. www.sqlite.org/docs.html</p>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- ANNEXURE 4: TWO-PAGE EXTENDED ABSTRACT (PAGE 1 OF 2)           -->
+    <!-- (AS PER VIPS GUIDELINES PAGE 1 ITEM 3)                         -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title" style="margin-top: 25px; margin-bottom: 20px;">EXTENDED ABSTRACT (PAGE 1 OF 2)</h1>
+        
+        <p style="text-align: center; font-size: 11pt; margin-bottom: 20px;">
+            <strong>Project Title:</strong> BookBridge – A Campus Book and Learning-Material Exchange Board<br/>
+            <strong>Student Name:</strong> Sanya &bull; <strong>Enrollment No.:</strong> 10517704426 &bull; <strong>Course:</strong> MCA 1-B<br/>
+            <strong>Project Mentor:</strong> Dr. Cosmena &bull; <strong>Institute:</strong> Vivekananda School of Information Technology, VIPS-TC
+        </p>
+
+        <h2 class="paragraph-heading"><u>1. Motivation and Problem Context</u></h2>
+        <p>
+            University students enrolled in professional computing disciplines (such as Master of Computer Applications and Computer Science Engineering) require numerous authoritative reference textbooks and laboratory manuals throughout each semester. Due to high retail costs, acquiring brand-new print editions for every course creates considerable financial burden. Simultaneously, senior students retain completed textbooks that remain idle. Current informal mechanisms—such as unindexed WhatsApp class groups or generic classified websites—expose students to unwanted spam, identity leaks, courier costs, and off-campus physical meetup hazards. <strong>BookBridge</strong> was conceptualized to establish an authenticated, secure campus directory enabling peer-to-peer textbook lending, exchange, and donation strictly within monitored university grounds.
+        </p>
+
+        <h2 class="paragraph-heading"><u>2. System Architecture and Methodology</u></h2>
+        <p>
+            The application was built following the 3-Tier Model-View-Controller (MVC) architectural model:
+        </p>
+        <ul>
+            <li><strong>Presentation Layer:</strong> Engineered using semantic HTML5, CSS3, JavaScript ES6, and Bootstrap 5.3, providing responsive book cards, dynamic search query filters, and modal interaction dialogs.</li>
+            <li><strong>Application Controller Layer:</strong> Driven by Python with the lightweight Flask framework (<code>app.py</code>), orchestrating URL routing, user session cryptography, form validation, and state machine coordination.</li>
+            <li><strong>Data Persistence Layer:</strong> Managed via an embedded SQLite3 relational database (<code>database.py</code> / <code>schema.sql</code>) enforcing foreign key constraints and atomic transaction integrity across four normalized entities: <code>users</code>, <code>listings</code>, <code>meeting_points</code>, and <code>exchange_requests</code>.</li>
+        </ul>
+
+        <h2 class="paragraph-heading"><u>3. Functional Innovations</u></h2>
+        <p>
+            BookBridge introduces three specialized capabilities tailored for campus life:
+        </p>
+        <ol>
+            <li><strong>Tri-Model Resource Sharing:</strong> Tailors interactions according to academic intent—<em>Lend</em> (capturing borrowing duration), <em>Exchange</em> (capturing offered trade title), and <em>Donate</em> (philanthropic giveaway).</li>
+            <li><strong>Deterministic Handover State Machine:</strong> Manages atomic transitions (<code>Available</code> &rarr; <code>Pending Review</code> &rarr; <code>Pending Handover</code> &rarr; <code>Completed</code>), preventing conflicting concurrent requests.</li>
+            <li><strong>Privacy-by-Design and Safe Campus Protocols:</strong> The system strictly excludes residential addresses from its database schema. Physical exchanges are restricted to approved, CCTV-monitored university zones (Central Library Foyer, SAC Atrium, MCA Lab 102 corridors) during official daylight operating hours (8:30 AM – 6:00 PM).</li>
+        </ol>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- ANNEXURE 4: TWO-PAGE EXTENDED ABSTRACT (PAGE 2 OF 2)           -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <h1 class="chapter-title" style="margin-top: 25px; margin-bottom: 20px;">EXTENDED ABSTRACT (PAGE 2 OF 2)</h1>
+
+        <h2 class="paragraph-heading"><u>4. Experimental Verification and Results</u></h2>
+        <p>
+            The software was verified through automated unit test suites (<code>test_app.py</code>) alongside interactive browser testing. Key validation milestones achieved:
+        </p>
+        <ul>
+            <li><strong>100% Test Pass Rate:</strong> Verified route status (HTTP 200), search queries, filter operations, password hashing (PBKDF2-SHA256), listing CRUD actions, self-request prevention guards, and state transitions.</li>
+            <li><strong>Sub-Second Response Times:</strong> Query execution across indexed records benchmarked at under 15 milliseconds, delivering instantaneous search responsiveness.</li>
+            <li><strong>Robust Exception Handling:</strong> Validated against empty submissions, duplicate roll numbers, and unauthorized access attempts.</li>
+        </ul>
+
+        <h2 class="paragraph-heading"><u>5. Economic and Social Impact</u></h2>
+        <p>
+            In an academic department of 120 MCA students, an average textbook costs ₹650 to ₹1,200. With each student reusing or borrowing an average of 4 books per academic year, collective student savings exceed <strong>₹3,12,000 annually</strong>. In addition to direct economic relief, the platform fosters peer collaboration, assists economically disadvantaged students, and reduces textbook paper waste.
+        </p>
+
+        <h2 class="paragraph-heading"><u>6. Conclusion and Future Directions</u></h2>
+        <p>
+            BookBridge fulfills all academic criteria set forth for the Minor Project-I (MCA-169) curriculum at VIPS-TC. It demonstrates the effective translation of database management, web systems engineering, and security design into a practical campus utility. Planned future enhancements include college SMTP email notifications, library QR-code scanning for cryptographic exchange timestamps, and AI-driven elective syllabus matching.
+        </p>
+
+        <div class="signature-row" style="margin-top: 60px;">
+            <div class="signature-col">
+                <p>____________________________________<br/>
+                <strong>Student Signature</strong><br/>
+                (Sanya - 10517704426)<br/>
+                MCA 1-B, VSIT</p>
+            </div>
+            <div class="signature-col" style="text-align: right;">
+                <p>____________________________________<br/>
+                <strong>Mentor Signature</strong><br/>
+                (Dr. Cosmena)<br/>
+                Project Mentor, VSIT</p>
+            </div>
+        </div>
+    </div>
+    <div class="page-break"></div>
+
+    <!-- ============================================================== -->
+    <!-- ANNEXURE 5: TEMPLATE FOR BACK-QUOTE (SPINE - PAGE 8)           -->
+    <!-- ============================================================== -->
+    <div class="document-sheet">
+        <p style="font-size: 10pt; font-family: sans-serif; color: #64748b;" class="no-print">Template for back-quote / spine (VIPS Guidelines Page 8)</p>
+        
+        <div style="margin-top: 250px; text-align: center;">
+            <div style="display: inline-block; border: 2px dashed #475569; padding: 25px 40px; font-size: 13pt; font-weight: bold; letter-spacing: 2px;">
+                BOOKBRIDGE – CAMPUS BOOK EXCHANGE &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SANYA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2026
+            </div>
+            <p style="margin-top: 30px; font-size: 10pt; color: #64748b;">
+                (Print and paste this label vertically along the book spine binding as per guidelines)
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

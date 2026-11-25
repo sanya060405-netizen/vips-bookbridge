@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Listing: {{ listing.title }} | BookBridge{% endblock %}
+
+{% block content %}
+<div class="container-xl py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-navy text-white p-4">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <i class="bi bi-pencil-square text-warning fs-4"></i>
+                        <h4 class="fw-bold mb-0">Edit Listing Details</h4>
+                    </div>
+                    <p class="text-white-50 small mb-0">
+                        Update book condition, handover availability status, or notes for '{{ listing.title }}'.
+                    </p>
+                </div>
+
+                <div class="card-body p-4">
+                    <form action="{{ url_for('edit_listing', listing_id=listing.id) }}" method="POST">
+                        <!-- Book Title -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Book / Material Title <span class="text-danger">*</span></label>
+                            <input type="text" name="title" class="form-control" value="{{ listing.title }}" required>
+                        </div>
+
+                        <!-- Author -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Author(s) <span class="text-danger">*</span></label>
+                            <input type="text" name="author" class="form-control" value="{{ listing.author }}" required>
+                        </div>
+
+                        <!-- Subject -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Subject / Module <span class="text-danger">*</span></label>
+                            <input type="text" name="subject" class="form-control" value="{{ listing.subject }}" required>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <!-- Course -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Course / Branch</label>
+                                <select name="course" class="form-select">
+                                    <option value="MCA" {% if listing.course == 'MCA' %}selected{% endif %}>MCA</option>
+                                    <option value="B.Tech CS" {% if listing.course == 'B.Tech CS' %}selected{% endif %}>B.Tech CS</option>
+                                    <option value="BCA" {% if listing.course == 'BCA' %}selected{% endif %}>BCA</option>
+                                    <option value="B.Tech IT" {% if listing.course == 'B.Tech IT' %}selected{% endif %}>B.Tech IT</option>
+                                    <option value="General Science" {% if listing.course == 'General Science' %}selected{% endif %}>General Science</option>
+                                </select>
+                            </div>
+
+                            <!-- Semester -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Semester</label>
+                                <select name="semester" class="form-select">
+                                    <option value="Semester 1" {% if listing.semester == 'Semester 1' %}selected{% endif %}>Semester 1</option>
+                                    <option value="Semester 2" {% if listing.semester == 'Semester 2' %}selected{% endif %}>Semester 2</option>
+                                    <option value="Semester 3" {% if listing.semester == 'Semester 3' %}selected{% endif %}>Semester 3</option>
+                                    <option value="Semester 4" {% if listing.semester == 'Semester 4' %}selected{% endif %}>Semester 4</option>
+                                    <option value="All Semesters" {% if listing.semester == 'All Semesters' %}selected{% endif %}>All Semesters</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <!-- Listing Type -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Listing Type</label>
+                                <select name="listing_type" class="form-select">
+                                    <option value="Lend" {% if listing.listing_type == 'Lend' %}selected{% endif %}>To Lend</option>
+                                    <option value="Exchange" {% if listing.listing_type == 'Exchange' %}selected{% endif %}>To Exchange</option>
+                                    <option value="Donate" {% if listing.listing_type == 'Donate' %}selected{% endif %}>Free Donation</option>
+                                </select>
+                            </div>
+
+                            <!-- Condition -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Condition</label>
+                                <select name="condition" class="form-select">
+                                    <option value="Like New" {% if listing.condition == 'Like New' %}selected{% endif %}>Like New</option>
+                                    <option value="Good" {% if listing.condition == 'Good' %}selected{% endif %}>Good</option>
+                                    <option value="Fair / Marked" {% if listing.condition == 'Fair / Marked' %}selected{% endif %}>Fair / Marked</option>
+                                    <option value="Annotated / Notes" {% if listing.condition == 'Annotated / Notes' %}selected{% endif %}>Annotated / Notes</option>
+                                </select>
+                            </div>
+
+                            <!-- Availability Status -->
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold">Availability Status</label>
+                                <select name="availability_status" class="form-select">
+                                    <option value="Available" {% if listing.availability_status == 'Available' %}selected{% endif %}>Available</option>
+                                    <option value="Pending Handover" {% if listing.availability_status == 'Pending Handover' %}selected{% endif %}>Pending Handover</option>
+                                    <option value="Completed" {% if listing.availability_status == 'Completed' %}selected{% endif %}>Completed</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Preferred Meeting Point -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Preferred Campus Meeting Point</label>
+                            <select name="preferred_meeting_point_id" class="form-select">
+                                {% for mp in meeting_points %}
+                                    <option value="{{ mp.id }}" {% if mp.id == listing.preferred_meeting_point_id %}selected{% endif %}>
+                                        {{ mp.name }} &bull; {{ mp.operating_hours }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Description & Remarks</label>
+                            <textarea name="description" class="form-control" rows="4">{{ listing.description }}</textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                            <a href="{{ url_for('listing_detail', listing_id=listing.id) }}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                                <i class="bi bi-check-lg me-1"></i>Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

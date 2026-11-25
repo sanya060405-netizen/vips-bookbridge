@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+
+{% block title %}BookBridge | Vivekananda Institute of Professional Studies{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5 text-white mb-4 position-relative overflow-hidden">
+    <div class="container-xl position-relative z-1">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-white bg-opacity-10 text-white small mb-3 border border-white border-opacity-25">
+                    <i class="bi bi-mortarboard-fill text-warning"></i>
+                    <span>VIVEKANANDA INSTITUTE OF PROFESSIONAL STUDIES &bull; Campus Resource Sharing</span>
+                </div>
+                <h1 class="display-5 fw-bold mb-3 tracking-tight">
+                    Share Textbooks. Save Money.<br>
+                    <span class="text-warning">Empower VIPS Campus Learning.</span>
+                </h1>
+                <p class="lead text-white-75 mb-4 max-w-650">
+                    The official peer-to-peer textbook lending, exchange, and donation directory for <strong>Vivekananda Institute of Professional Studies</strong>. Connect with campus peers and coordinate safe handovers at monitored campus zones.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="#browse-section" class="btn btn-warning px-4 py-2 fw-semibold">
+                        <i class="bi bi-search me-1"></i>Browse Available Books
+                    </a>
+                    {% if g.user %}
+                        <a href="{{ url_for('create_listing') }}" class="btn btn-outline-light px-4 py-2">
+                            <i class="bi bi-plus-lg me-1"></i>Post a Book / Notes
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('register') }}" class="btn btn-outline-light px-4 py-2">
+                            <i class="bi bi-person-plus me-1"></i>Join as Student
+                        </a>
+                    {% endif %}
+                    <a href="{{ url_for('handover_guidelines') }}" class="btn btn-link text-white text-decoration-none d-flex align-items-center gap-1">
+                        <i class="bi bi-shield-check text-warning"></i>Handover Rules
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 d-none d-lg-block">
+                <div class="glass-card p-4 text-white">
+                    <h6 class="text-uppercase fw-bold text-warning mb-3 small d-flex align-items-center gap-2">
+                        <i class="bi bi-bar-chart-fill"></i>Campus Exchange Stats
+                    </h6>
+                    <div class="row g-2 text-center">
+                        <div class="col-6">
+                            <div class="stat-box p-3 rounded">
+                                <div class="fs-3 fw-bold">{{ stats.total }}</div>
+                                <div class="small text-white-75">Total Materials</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-box p-3 rounded">
+                                <div class="fs-3 fw-bold text-success">{{ stats.available }}</div>
+                                <div class="small text-white-75">Ready to Take</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-box p-2 rounded">
+                                <div class="fs-5 fw-bold text-info">{{ stats.lending }}</div>
+                                <div class="x-small text-white-75">To Lend</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-box p-2 rounded">
+                                <div class="fs-5 fw-bold text-warning">{{ stats.exchanges }}</div>
+                                <div class="x-small text-white-75">Exchange</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-box p-2 rounded">
+                                <div class="fs-5 fw-bold text-danger">{{ stats.donations }}</div>
+                                <div class="x-small text-white-75">Free Donate</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-center border-top border-white border-opacity-10 pt-2">
+                        <small class="text-white-50"><i class="bi bi-shield-lock me-1"></i>Safe Handover at Approved Campus Desks</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter & Search Toolbar Section -->
+<div class="container-xl" id="browse-section">
+    <div class="card border-0 shadow-sm rounded-4 mb-4 filter-bar">
+        <div class="card-body p-4">
+            <form action="{{ url_for('index') }}" method="GET" class="row g-3 align-items-end">
+                <!-- Search input -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold small text-muted">Keywords / Book Title / Author</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" name="q" class="form-control border-start-0" placeholder="e.g. DBMS, Silberschatz, Java, Rosen..." value="{{ selected_q }}">
+                    </div>
+                </div>
+
+                <!-- Type filter -->
+                <div class="col-6 col-md-2">
+                    <label class="form-label fw-semibold small text-muted">Exchange Type</label>
+                    <select name="type" class="form-select">
+                        <option value="All" {% if selected_type == 'All' or not selected_type %}selected{% endif %}>All Types</option>
+                        <option value="Lend" {% if selected_type == 'Lend' %}selected{% endif %}>To Lend</option>
+                        <option value="Exchange" {% if selected_type == 'Exchange' %}selected{% endif %}>To Exchange</option>
+                        <option value="Donate" {% if selected_type == 'Donate' %}selected{% endif %}>Free Donation</option>
+                    </select>
+                </div>
+
+                <!-- Course filter -->
+                <div class="col-6 col-md-2">
+                    <label class="form-label fw-semibold small text-muted">Course / Dept</label>
+                    <select name="course" class="form-select">
+                        <option value="All" {% if selected_course == 'All' or not selected_course %}selected{% endif %}>All Courses</option>
+                        {% for c in courses %}
+                            <option value="{{ c['course'] }}" {% if selected_course == c['course'] %}selected{% endif %}>{{ c['course'] }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Availability Status -->
+                <div class="col-6 col-md-2">
+                    <label class="form-label fw-semibold small text-muted">Status</label>
+                    <select name="status" class="form-select">
+                        <option value="All" {% if selected_status == 'All' or not selected_status %}selected{% endif %}>All Statuses</option>
+                        <option value="Available" {% if selected_status == 'Available' %}selected{% endif %}>Available Now</option>
+                        <option value="Pending Handover" {% if selected_status == 'Pending Handover' %}selected{% endif %}>Pending Handover</option>
+                        <option value="Completed" {% if selected_status == 'Completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                </div>
+
+                <!-- Buttons -->
+                <div class="col-6 col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary w-100 fw-semibold">
+                        <i class="bi bi-funnel-fill me-1"></i>Filter
+                    </button>
+                    {% if selected_q or selected_type or selected_course or selected_status or selected_mp %}
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary" title="Clear Filters">
+                            <i class="bi bi-x-lg"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Active Filter Chips (if any) -->
+    {% if selected_q or selected_type or selected_course or selected_status %}
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3 small">
+            <span class="text-muted fw-semibold">Active Filters:</span>
+            {% if selected_q %}
+                <span class="badge bg-light text-dark border">Keyword: "{{ selected_q }}"</span>
+            {% endif %}
+            {% if selected_type and selected_type != 'All' %}
+                <span class="badge bg-light text-dark border">Type: {{ selected_type }}</span>
+            {% endif %}
+            {% if selected_course and selected_course != 'All' %}
+                <span class="badge bg-light text-dark border">Course: {{ selected_course }}</span>
+            {% endif %}
+            {% if selected_status and selected_status != 'All' %}
+                <span class="badge bg-light text-dark border">Status: {{ selected_status }}</span>
+            {% endif %}
+            <a href="{{ url_for('index') }}" class="text-danger text-decoration-none small ms-2"><i class="bi bi-x-circle me-1"></i>Reset all</a>
+        </div>
+    {% endif %}
+
+    <!-- Book Listings Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4 class="fw-bold mb-0 text-navy">
+                <i class="bi bi-journal-bookmark-fill me-2 text-primary"></i>Available Learning Materials
+            </h4>
+            <p class="text-muted small mb-0">Showing {{ listings|length }} items registered on campus directory</p>
+        </div>
+        <div>
+            {% if g.user %}
+                <a href="{{ url_for('create_listing') }}" class="btn btn-sm btn-outline-primary d-none d-sm-inline-flex align-items-center gap-1">
+                    <i class="bi bi-plus-lg"></i>Post Your Book
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Book Listings Grid -->
+    {% if listings %}
+        <div class="row g-4 mb-5">
+            {% for item in listings %}
+                <div class="col-md-6 col-lg-4 col-xl-3">
+                    <div class="card h-100 book-card border-0 shadow-sm rounded-3 overflow-hidden position-relative">
+                        <!-- Top header of card: listing type and status badge -->
+                        <div class="card-banner-header d-flex justify-content-between align-items-center px-3 py-2 bg-light border-bottom">
+                            <!-- Type badge -->
+                            {% if item.listing_type == 'Lend' %}
+                                <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle fw-semibold">
+                                    <i class="bi bi-arrow-repeat me-1"></i>To Lend
+                                </span>
+                            {% elif item.listing_type == 'Exchange' %}
+                                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fw-semibold">
+                                    <i class="bi bi-arrow-left-right me-1"></i>Exchange
+                                </span>
+                            {% else %}
+                                <span class="badge bg-success-subtle text-success-emphasis border border-success-subtle fw-semibold">
+                                    <i class="bi bi-heart-fill me-1 text-danger"></i>Free Donation
+                                </span>
+                            {% endif %}
+
+                            <!-- Status Pill -->
+                            {% if item.availability_status == 'Available' %}
+                                <span class="badge bg-success text-white small"><i class="bi bi-check-circle me-1"></i>Available</span>
+                            {% elif item.availability_status == 'Pending Handover' %}
+                                <span class="badge bg-warning text-dark small"><i class="bi bi-clock-history me-1"></i>Pending Handover</span>
+                            {% else %}
+                                <span class="badge bg-secondary text-white small"><i class="bi bi-check2-all me-1"></i>Completed</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="card-body p-3 d-flex flex-column">
+                            <!-- Subject & Semester Tags -->
+                            <div class="d-flex align-items-center gap-1 mb-2">
+                                <span class="badge bg-primary-subtle text-primary small">{{ item.course }}</span>
+                                <span class="badge bg-secondary-subtle text-secondary small">{{ item.semester }}</span>
+                            </div>
+
+                            <!-- Book Title -->
+                            <h5 class="card-title fw-bold text-navy mb-1 line-clamp-2" title="{{ item.title }}">
+                                {{ item.title }}
+                            </h5>
+                            <!-- Author -->
+                            <p class="text-muted small mb-2 fst-italic">
+                                <i class="bi bi-pencil-square me-1"></i>{{ item.author }}
+                            </p>
+
+                            <!-- Subject Name -->
+                            <div class="small text-secondary mb-2">
+                                <strong>Subject:</strong> {{ item.subject }}
+                            </div>
+
+                            <!-- Condition pill -->
+                            <div class="mb-3">
+                                <span class="condition-badge">
+                                    <i class="bi bi-tag-fill me-1 text-muted"></i>Condition: <strong>{{ item.condition }}</strong>
+                                </span>
+                            </div>
+
+                            <!-- Meeting Point -->
+                            <div class="meeting-spot-pill mt-auto mb-3 small p-2 rounded bg-light border text-truncate">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                <span class="text-muted">Handover Spot:</span>
+                                <strong class="text-dark">{{ item.meeting_point_name or "Campus Designated Area" }}</strong>
+                            </div>
+
+                            <!-- Owner Info -->
+                            <div class="d-flex align-items-center justify-content-between pt-2 border-top small text-muted">
+                                <span><i class="bi bi-person me-1"></i>{{ item.owner_name }}</span>
+                                <span class="text-muted">{{ item.owner_year }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer Action Buttons -->
+                        <div class="card-footer bg-white border-0 pt-0 pb-3 px-3">
+                            <div class="d-grid gap-2">
+                                <a href="{{ url_for('listing_detail', listing_id=item.id) }}" class="btn btn-outline-primary btn-sm fw-semibold">
+                                    <i class="bi bi-eye me-1"></i>View Details & Request
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Empty State -->
+        <div class="card border-0 shadow-sm rounded-4 p-5 text-center my-4">
+            <div class="mb-3">
+                <i class="bi bi-journal-x text-muted" style="font-size: 3.5rem;"></i>
+            </div>
+            <h4 class="fw-bold text-navy">No learning materials match your filters</h4>
+            <p class="text-muted max-w-500 mx-auto mb-4">
+                We couldn't find any listings matching your search criteria. Try modifying your search keywords or clearing applied filters.
+            </p>
+            <div>
+                <a href="{{ url_for('index') }}" class="btn btn-primary px-4 me-2">Clear All Filters</a>
+                {% if g.user %}
+                    <a href="{{ url_for('create_listing') }}" class="btn btn-outline-success px-4">Post a Book Instead</a>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Safe Campus Handover Banner -->
+    <div class="card border-primary border-opacity-25 bg-primary-subtle rounded-4 p-4 mb-5">
+        <div class="row align-items-center g-3">
+            <div class="col-md-8">
+                <h5 class="fw-bold text-primary mb-1">
+                    <i class="bi bi-shield-check me-2"></i>VIPS Safe Campus Handover Commitment
+                </h5>
+                <p class="mb-0 small text-primary-emphasis">
+                    BookBridge encourages safe book handovers during regular university hours (8:30 AM – 6:00 PM) at monitored public zones including the <strong>Central Library Foyer (A-Block)</strong>, <strong>Student Activity Centre (SAC) Atrium</strong>, and <strong>VSIT IT Lab Corridor</strong> at Vivekananda Institute of Professional Studies. Personal residential addresses are never published.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{{ url_for('handover_guidelines') }}" class="btn btn-primary fw-semibold">
+                    Read Handover Rules & Spots
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
