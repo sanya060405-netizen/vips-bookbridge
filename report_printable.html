@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minor Project Report - BookBridge | Sanya (10517704426)</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 20mm 18mm 22mm 18mm;
+            @bottom-left {
+                content: "BookBridge – Campus Book Exchange | Sanya (10517704426)";
+                font-family: Georgia, serif;
+                font-size: 8.5pt;
+                color: #555;
+            }
+            @bottom-right {
+                content: "Page " counter(page) " of " counter(pages);
+                font-family: Georgia, serif;
+                font-size: 8.5pt;
+                color: #555;
+            }
+        }
+        
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, Georgia, serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            color: #1a1a1a;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+        }
+
+        .page {
+            page-break-after: always;
+            position: relative;
+            min-height: 250mm;
+            padding-bottom: 15mm;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
+        }
+
+        .page-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            font-size: 8.5pt;
+            color: #555;
+            border-top: 1px solid #d1d5db;
+            padding-top: 6px;
+        }
+
+        @media print {
+            .page-footer {
+                display: none; /* Managed by @page in modern PDF print */
+            }
+            .no-print {
+                display: none;
+            }
+            body {
+                padding: 0;
+            }
+        }
+
+        /* Screen preview styling */
+        @media screen {
+            body {
+                background: #e5e7eb;
+                padding: 30px 10px;
+            }
+            .page {
+                background: white;
+                max-width: 210mm;
+                min-height: 297mm;
+                margin: 0 auto 30px auto;
+                padding: 22mm 20mm 20mm 20mm;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            }
+            .print-btn-bar {
+                position: fixed;
+                top: 15px;
+                right: 20px;
+                z-index: 1000;
+                background: #1e3a8a;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                font-family: sans-serif;
+                font-size: 14px;
+                cursor: pointer;
+                border: none;
+                font-weight: 600;
+            }
+            .print-btn-bar:hover {
+                background: #172554;
+            }
+        }
+
+        .top-badge {
+            text-align: center;
+            font-size: 9.5pt;
+            font-weight: bold;
+            color: #1e3a8a;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .main-title {
+            text-align: center;
+            font-size: 23pt;
+            font-weight: bold;
+            color: #1e3a8a;
+            margin: 0 0 6px 0;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 12.5pt;
+            font-style: italic;
+            color: #4b5563;
+            margin: 0 0 16px 0;
+        }
+
+        .divider {
+            height: 2px;
+            background: #1e3a8a;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 13pt;
+            color: #1e3a8a;
+            margin: 18px 0 8px 0;
+            font-weight: bold;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 4px;
+        }
+
+        h3 {
+            font-size: 11.5pt;
+            color: #1f2937;
+            margin: 14px 0 6px 0;
+            font-weight: bold;
+        }
+
+        p {
+            margin: 0 0 8px 0;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        ul {
+            margin: 0 0 10px 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 5px;
+            text-align: justify;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0 14px 0;
+            font-size: 9.5pt;
+        }
+
+        th, td {
+            border: 1px solid #d1d5db;
+            padding: 6px 8px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #f3f4f6;
+            color: #111827;
+            font-weight: bold;
+        }
+
+        .sig-block {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .sig-col {
+            width: 48%;
+            font-size: 10pt;
+        }
+
+        .box-arch {
+            background: #f9fafb;
+            border: 1px solid #1e3a8a;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 9.5pt;
+        }
+
+        .code-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 8px 12px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 8.8pt;
+            line-height: 1.4;
+            margin: 8px 0;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+
+        .fig-placeholder {
+            border: 1.5px dashed #9ca3af;
+            background: #f9fafb;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+            margin: 12px 0;
+            font-size: 9.5pt;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn-bar no-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+
+    <!-- ================= PAGE 1 ================= -->
+    <div class="page">
+        <div class="top-badge">MINOR PROJECT REPORT &bull; MASTER OF COMPUTER APPLICATIONS (MCA 1-B)</div>
+        <div class="main-title">BookBridge – Campus Book Exchange</div>
+        <div class="subtitle">A Web-Based Campus Book and Learning-Material Exchange Board</div>
+        <div class="divider"></div>
+
+        <h2>Student & Submission Details</h2>
+        <table>
+            <tr>
+                <th style="width: 32%;">Particulars</th>
+                <th>Details</th>
+            </tr>
+            <tr>
+                <td><strong>Student Name</strong></td>
+                <td>Sanya</td>
+            </tr>
+            <tr>
+                <td><strong>Enrollment Number</strong></td>
+                <td>10517704426</td>
+            </tr>
+            <tr>
+                <td><strong>Course & Section</strong></td>
+                <td>Master of Computer Applications (MCA 1-B)</td>
+            </tr>
+            <tr>
+                <td><strong>Project Title</strong></td>
+                <td>BookBridge – A Campus Book and Learning-Material Exchange Board</td>
+            </tr>
+            <tr>
+                <td><strong>Project Mentor</strong></td>
+                <td>Dr. Cosmena</td>
+            </tr>
+            <tr>
+                <td><strong>Submission Date</strong></td>
+                <td>November 17, 2026</td>
+            </tr>
+            <tr>
+                <td><strong>Project Status</strong></td>
+                <td>Completed</td>
+            </tr>
+            <tr>
+                <td><strong>Report Status</strong></td>
+                <td>Completed (Plagiarism check report to be attached from the library)</td>
+            </tr>
+        </table>
+
+        <h2>Declaration</h2>
+        <p>
+            I, <strong>Sanya</strong> (Enrollment No. <strong>10517704426</strong>), a student of Master of Computer Applications (MCA 1-B), hereby declare that this minor project report titled <em>“BookBridge – A Campus Book and Learning-Material Exchange Board”</em> is my original work carried out under the guidance of <strong>Dr. Cosmena</strong>. All sources referred to during this work have been listed in the references section. This report has not been submitted elsewhere for any other degree or diploma.
+        </p>
+        <div class="sig-block">
+            <div class="sig-col">Date: ________________________</div>
+            <div class="sig-col" style="text-align: right;">Signature of Student: ________________________</div>
+        </div>
+
+        <h2 style="margin-top: 30px;">Certificate</h2>
+        <p>
+            This is to certify that <strong>Sanya</strong> (Enrollment No. <strong>10517704426</strong>), a student of MCA 1-B, has successfully completed the minor project titled <em>“BookBridge – Campus Book and Learning-Material Exchange Board”</em> under my supervision and guidance. To the best of my knowledge, this work is original and fulfills the requirements of the course.
+        </p>
+        <div class="sig-block">
+            <div class="sig-col">Date: ________________________</div>
+            <div class="sig-col" style="text-align: right;">Project Mentor (Dr. Cosmena): ________________________</div>
+        </div>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 1 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 2 ================= -->
+    <div class="page">
+        <h2>Acknowledgement</h2>
+        <p>
+            I would like to express my sincere thanks to my project mentor, <strong>Dr. Cosmena</strong>, for her constant guidance, valuable suggestions, and support throughout the completion of this project. I am also thankful to the faculty members of the MCA department and my classmates for testing the application and giving helpful feedback, as well as my family for their encouragement.
+        </p>
+
+        <h2>Abstract</h2>
+        <p>
+            <strong>BookBridge</strong> is a web-based campus exchange directory that connects students who have unused learning materials with students who need them. Today, students frequently require textbooks, reference manuals, and practical guides for their academic courses, but purchasing brand-new retail copies each semester is expensive. At the same time, many senior and peer students possess textbooks and study materials they no longer actively use. These materials often sit unused in dormitories and homes, even though other students could benefit from borrowing, exchanging, or receiving them.
+        </p>
+        <p>
+            This application allows registered students to search, filter, and browse listings by book title, author, subject module, and course (such as MCA, B.Tech CS, BCA). The platform supports three flexible resource-sharing models: <strong>Lending</strong> (with a specified borrowing timeframe), <strong>Exchange</strong> (book-for-book trade), and <strong>Free Donation</strong>. Through an intuitive request-interest flow, students can communicate their requirements and propose handover arrangements. To protect student privacy, the system strictly avoids publishing personal residential addresses and coordinates physical handovers exclusively at approved, monitored university meeting points such as the Central Library Foyer and Student Activity Centre (SAC).
+        </p>
+        <p>
+            The project is built using HTML5, CSS3, and JavaScript for the frontend, Python with the Flask web framework for the backend, and SQLite for relational database management. The web portal includes active search filtering, listing creation/editing, student dashboards for managing requests, and comprehensive campus handover guidelines. All automated test cases written for the project pass successfully.
+        </p>
+        <p>
+            <strong>Keywords:</strong> Campus Book Exchange, Peer-to-Peer Resource Sharing, Academic Lending, Flask Web Framework, SQLite, Web Development, Campus Safety.
+        </p>
+
+        <h2>1. Introduction</h2>
+        <h3>1.1 Background</h3>
+        <p>
+            Textbooks, syllabus reference books, and laboratory manuals represent an essential yet recurring financial cost for university students. In professional technical degrees like the Master of Computer Applications (MCA) and Computer Science Engineering, prescribed reference volumes—such as Database System Concepts by Korth, Computer Networks by Tanenbaum, and Data Structures by Cormen—command substantial retail prices. Once students conclude semester examinations, these books frequently remain unused, while incoming juniors seek identical copies for their coursework.
+        </p>
+        <p>
+            While digital PDFs are common, physical textbooks remain indispensable for sustained study, mathematical problem-solving, and university open-book evaluations. However, university campuses typically lack an organized, secure directory to facilitate direct peer-to-peer textbook reuse. Commercial buyback platforms impose heavy courier cuts, while informal messaging groups suffer from clutter and lack privacy protection.
+        </p>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 2 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 3 ================= -->
+    <div class="page">
+        <h3>1.2 Problem Statement</h3>
+        <p>
+            When a student needs a course textbook or has finished using one, finding a peer is not straightforward. Searching across unorganized student chat groups or generic classified websites is time-consuming, unindexed, and exposes students' personal phone numbers publicly. Commercial buyback portals offer negligible repurchase value and require shipping. Furthermore, meeting unknown individuals off-campus presents safety concerns. Therefore, there is a clear need for an easy, campus-centric web tool that catalogs available study materials, enables structured interest requests, and enforces safe handovers strictly at monitored university premises.
+        </p>
+
+        <h3>1.3 Objectives</h3>
+        <ul>
+            <li>Provide a searchable catalogue where students can browse books and learning materials by title, author, subject, or course.</li>
+            <li>Support three distinct sharing options: Lending (time-bound), Exchange (reciprocal trade), and Free Donation.</li>
+            <li>Implement an interactive request-interest workflow enabling borrowers to propose terms and owners to review and respond.</li>
+            <li>Enforce campus safety protocols by restricting physical exchanges to designated, CCTV-monitored university meeting points.</li>
+            <li>Safeguard student privacy by completely avoiding collection or publication of private residential addresses.</li>
+            <li>Provide student dashboards for tracking uploaded listings, incoming interest requests, and active handovers.</li>
+        </ul>
+
+        <h3>1.4 Scope of the Project</h3>
+        <p>
+            The application operates as a local campus web portal for university students and faculty. It handles catalog search, listing creation, request-interest coordination, and campus handover status tracking using Python, Flask, and SQLite. Payment gateway processing, commercial parcel deliveries, and inter-city shipping are outside the scope of this minor project.
+        </p>
+
+        <h2>2. System Analysis</h2>
+        <h3>2.1 Existing Methods and Their Limitations</h3>
+        <p>
+            Currently, university students rely on informal, fragmented methods to procure second-hand textbooks, each with notable limitations:
+        </p>
+        <ul>
+            <li><strong>Commercial Resale Portals:</strong> Sites like OLX or commercial resellers charge commission fees, involve shipping delays, and fail to cater to specific university course syllabi.</li>
+            <li><strong>Unorganized Chat Groups:</strong> WhatsApp and Telegram batch groups are flooded with unstructured requests that quickly get buried without searchability or status tracking.</li>
+            <li><strong>Privacy Exposure:</strong> Posting book requests in broad social media groups exposes personal phone numbers and identities publicly.</li>
+            <li><strong>Physical Safety Risks:</strong> Informal trades often lead students to arrange unverified meetups at off-campus street locations or after hours.</li>
+        </ul>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 3 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 4 ================= -->
+    <div class="page">
+        <h3>2.2 Proposed System</h3>
+        <p>
+            <strong>BookBridge</strong> solves these issues through a centralized, secure university portal. Students can list unused textbooks in seconds, specifying subject, semester, physical condition, and exchange model (Lend, Exchange, or Donate). Borrowers can filter listings and submit an interest request stating their requirement. Book owners manage requests on their personal dashboard, accept terms, and meet at approved campus locations (such as the Central Library Foyer) during verified daylight hours, completely eliminating off-campus risks.
+        </p>
+
+        <h3>2.3 Feasibility Study</h3>
+        <table>
+            <tr>
+                <th style="width: 25%;">Feasibility Type</th>
+                <th>Assessment</th>
+            </tr>
+            <tr>
+                <td><strong>Technical Feasibility</strong></td>
+                <td>Built using Python, Flask, SQLite, HTML5, CSS3, and JavaScript. All components are lightweight, well-documented, and execute reliably on any standard laptop without complex dependencies.</td>
+            </tr>
+            <tr>
+                <td><strong>Economic Feasibility</strong></td>
+                <td>Zero financial cost. All frameworks, libraries, and database engines utilized are open-source and free, requiring no paid server subscriptions or external API licenses.</td>
+            </tr>
+            <tr>
+                <td><strong>Operational Feasibility</strong></td>
+                <td>Highly intuitive. The main interface features structured card layouts, quick filters, and status badges, allowing any student to search, list, or request books without special training.</td>
+            </tr>
+            <tr>
+                <td><strong>Schedule Feasibility</strong></td>
+                <td>Designed with a focused academic scope so that coding, database schema implementation, testing, and documentation were completed comfortably within the minor project timeline.</td>
+            </tr>
+        </table>
+
+        <h2>3. System Requirements</h2>
+        <h3>3.1 Functional Requirements</h3>
+        <table>
+            <tr>
+                <th style="width: 12%;">Req. ID</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td><strong>FR1</strong></td>
+                <td>The system enables students to register and sign in securely using their Enrollment Number and password.</td>
+            </tr>
+            <tr>
+                <td><strong>FR2</strong></td>
+                <td>Registered users can post new learning materials by entering Title, Author, Subject, Course, Condition, Type, and Handover Spot.</td>
+            </tr>
+            <tr>
+                <td><strong>FR3</strong></td>
+                <td>The directory provides real-time search across titles, authors, and subjects, with filters for Course, Type, and Status.</td>
+            </tr>
+            <tr>
+                <td><strong>FR4</strong></td>
+                <td>Students can express interest in a book by proposing a message, borrowing duration, or reciprocal trade book.</td>
+            </tr>
+            <tr>
+                <td><strong>FR5</strong></td>
+                <td>Book owners can review incoming interest requests and Accept, Decline, or mark them as Completed.</td>
+            </tr>
+            <tr>
+                <td><strong>FR6</strong></td>
+                <td>The system automatically updates listing availability status from 'Available' to 'Pending Handover' and 'Completed'.</td>
+            </tr>
+            <tr>
+                <td><strong>FR7</strong></td>
+                <td>The system enforces pre-approved campus meeting points and provides a dedicated Campus Handover Guidelines section.</td>
+            </tr>
+            <tr>
+                <td><strong>FR8</strong></td>
+                <td>Form validations reject incomplete inputs and prevent students from expressing interest in their own listings.</td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 4 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 5 ================= -->
+    <div class="page">
+        <h3>3.2 Non-Functional Requirements</h3>
+        <ul>
+            <li><strong>Usability:</strong> Responsive layout powered by Bootstrap 5, optimized for seamless viewing on laptops, tablets, and smartphones.</li>
+            <li><strong>Performance:</strong> Fast database queries and lightweight Jinja2 rendering deliver page loads in under 200 milliseconds.</li>
+            <li><strong>Privacy:</strong> Zero collection or display of personal home addresses or dorm rooms. Contact phone numbers are only revealed after an owner accepts a request.</li>
+            <li><strong>Security:</strong> Password protection via cryptographic hashing (PBKDF2-SHA256 via Werkzeug) and parameterized SQL queries preventing SQL Injection.</li>
+            <li><strong>Reliability:</strong> Relational foreign key constraints in SQLite prevent orphan records or dangling requests upon book deletion.</li>
+        </ul>
+
+        <h3>3.3 Hardware and Software Requirements</h3>
+        <table>
+            <tr>
+                <th style="width: 30%;">Component</th>
+                <th>Minimum Requirement</th>
+            </tr>
+            <tr>
+                <td><strong>Processor & RAM</strong></td>
+                <td>Intel Core i3 / AMD Ryzen 3 or higher; Minimum 4 GB RAM</td>
+            </tr>
+            <tr>
+                <td><strong>Operating System</strong></td>
+                <td>Windows 10 or later (also compatible with Linux and macOS)</td>
+            </tr>
+            <tr>
+                <td><strong>Programming Language</strong></td>
+                <td>Python 3.10 or later</td>
+            </tr>
+            <tr>
+                <td><strong>Web Framework & Tools</strong></td>
+                <td>Flask 3.x, Jinja2, Werkzeug Security, unittest / pytest</td>
+            </tr>
+            <tr>
+                <td><strong>Database Engine</strong></td>
+                <td>SQLite3 (embedded relational database with row factory)</td>
+            </tr>
+            <tr>
+                <td><strong>Web Browser & Editor</strong></td>
+                <td>Google Chrome, Microsoft Edge, or Mozilla Firefox; VS Code or Antigravity IDE</td>
+            </tr>
+        </table>
+
+        <h2>4. System Design</h2>
+        <h3>4.1 System Architecture</h3>
+        <p>
+            The application follows a clean Model-View-Controller (MVC) architecture. The student interacts with the web browser, which sends HTTP requests to the Flask backend (<code>app.py</code>). Flask coordinates request validation, executes business logic, interacts with the SQLite database (<code>database.py</code>), and returns dynamically rendered templates.
+        </p>
+
+        <div class="box-arch">
+            <p style="margin-bottom: 6px;"><strong>Step 1 – User Browser (Frontend):</strong> Renders HTML5 templates styled with Bootstrap 5 and custom CSS. Dispatches GET filter queries and POST request submissions.</p>
+            <p style="margin-bottom: 6px;"><strong>Step 2 – Flask Server (app.py):</strong> Handles URL routing, session authentication, input validation, flash alerts, and orchestrates exchange workflows.</p>
+            <p style="margin-bottom: 6px;"><strong>Step 3 – Exchange Workflow Engine:</strong> Manages state transitions of listings (Available &rarr; Pending Handover &rarr; Completed) and handles interest communication between students.</p>
+            <p style="margin-bottom: 0;"><strong>Step 4 – SQLite Database (database.py):</strong> Enforces relational integrity across normalized tables and runs parameterized SQL queries.</p>
+        </div>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 5 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 6 ================= -->
+    <div class="page">
+        <h3>4.2 Data Flow Overview</h3>
+        <p>
+            At the top level (<strong>Level 0 Context DFD</strong>), the Student is the primary external entity who interacts with BookBridge by registering credentials, posting book listings, searching the catalogue, submitting interest requests, and coordinating handovers. The system responds with real-time book availability, filtered results, and handover instructions.
+        </p>
+        <p>
+            Internally (<strong>Level 1 DFD</strong>), the system comprises five main functional stages: (1) <em>User Authentication</em> — validates enrollment number and password hash; (2) <em>Listing Management</em> — stores and updates book records in <code>listings</code>; (3) <em>Catalog Querying</em> — executes multi-criteria SQL SELECT queries; (4) <em>Interest Request Processing</em> — records borrower proposals in <code>exchange_requests</code>; and (5) <em>Handover State Transition</em> — updates book status to 'Pending Handover' upon acceptance and 'Completed' upon final exchange.
+        </p>
+
+        <h3>4.3 Database Design</h3>
+        <p>
+            The database structure uses four relational tables with enforced foreign key constraints:
+        </p>
+        <table>
+            <tr>
+                <th style="width: 22%;">Table Name</th>
+                <th style="width: 25%;">Column</th>
+                <th style="width: 20%;">Data Type</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td><strong>users</strong><br/>(Stores student accounts)</td>
+                <td>id<br/>enrollment_no<br/>full_name<br/>email<br/>password_hash<br/>department<br/>course_year<br/>contact_phone</td>
+                <td>INTEGER (PK)<br/>TEXT (UNIQUE)<br/>TEXT<br/>TEXT (UNIQUE)<br/>TEXT<br/>TEXT<br/>TEXT<br/>TEXT</td>
+                <td>Primary Key<br/>Student Roll Number<br/>Student Full Name<br/>Campus Email<br/>PBKDF2-SHA256 Hash<br/>Department<br/>Class / Section<br/>Contact Phone</td>
+            </tr>
+            <tr>
+                <td><strong>meeting_points</strong><br/>(Approved campus spots)</td>
+                <td>id<br/>name<br/>location_desc<br/>operating_hours<br/>safety_notes</td>
+                <td>INTEGER (PK)<br/>TEXT<br/>TEXT<br/>TEXT<br/>TEXT</td>
+                <td>Primary Key<br/>Spot Name (e.g. Library)<br/>Location Description<br/>Operating Hours<br/>CCTV / Safety Notes</td>
+            </tr>
+            <tr>
+                <td><strong>listings</strong><br/>(Book & study materials)</td>
+                <td>id<br/>user_id<br/>title<br/>author<br/>subject<br/>course<br/>semester<br/>listing_type<br/>condition<br/>availability_status<br/>preferred_mp_id</td>
+                <td>INTEGER (PK)<br/>INTEGER (FK)<br/>TEXT<br/>TEXT<br/>TEXT<br/>TEXT<br/>TEXT<br/>TEXT<br/>TEXT<br/>TEXT<br/>INTEGER (FK)</td>
+                <td>Primary Key<br/>References users(id)<br/>Book Title<br/>Author Name(s)<br/>Subject / Module<br/>Branch (MCA, etc.)<br/>Semester<br/>Lend / Exchange / Donate<br/>Condition<br/>Available / Pending / Done<br/>References meeting_points</td>
+            </tr>
+            <tr>
+                <td><strong>exchange_requests</strong><br/>(Interest requests)</td>
+                <td>id<br/>listing_id<br/>requester_id<br/>meeting_point_id<br/>message<br/>offered_exchange_item<br/>proposed_duration<br/>status<br/>owner_remarks</td>
+                <td>INTEGER (PK)<br/>INTEGER (FK)<br/>INTEGER (FK)<br/>INTEGER (FK)<br/>TEXT<br/>TEXT<br/>TEXT<br/>TEXT<br/>TEXT</td>
+                <td>Primary Key<br/>References listings(id)<br/>References users(id)<br/>References meeting_points<br/>Borrower message<br/>Offered trade item<br/>Proposed borrow time<br/>Pending/Accepted/Done<br/>Owner handover note</td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 6 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 7 ================= -->
+    <div class="page">
+        <h3>4.4 Application Routes</h3>
+        <table>
+            <tr>
+                <th style="width: 25%;">Route</th>
+                <th style="width: 14%;">Method</th>
+                <th>Function</th>
+            </tr>
+            <tr>
+                <td><strong>/</strong></td>
+                <td>GET</td>
+                <td>Opens main catalogue with keyword search and multi-parameter filtering.</td>
+            </tr>
+            <tr>
+                <td><strong>/listing/&lt;id&gt;</strong></td>
+                <td>GET</td>
+                <td>Displays full book metadata, meeting spot details, and request form.</td>
+            </tr>
+            <tr>
+                <td><strong>/listings/create</strong></td>
+                <td>GET, POST</td>
+                <td>Allows authenticated students to list books for Lend, Exchange, or Donate.</td>
+            </tr>
+            <tr>
+                <td><strong>/listings/&lt;id&gt;/edit</strong></td>
+                <td>GET, POST</td>
+                <td>Enables book owners to update description, condition, or status.</td>
+            </tr>
+            <tr>
+                <td><strong>/listing/&lt;id&gt;/express-interest</strong></td>
+                <td>POST</td>
+                <td>Submits borrower interest request with duration or trade offer.</td>
+            </tr>
+            <tr>
+                <td><strong>/requests/&lt;id&gt;/update</strong></td>
+                <td>POST</td>
+                <td>Owner accepts, declines, or marks handover as completed.</td>
+            </tr>
+            <tr>
+                <td><strong>/dashboard/my-listings</strong></td>
+                <td>GET</td>
+                <td>Displays student's posted books and pending request indicators.</td>
+            </tr>
+            <tr>
+                <td><strong>/dashboard/my-requests</strong></td>
+                <td>GET</td>
+                <td>Hub for managing incoming peer requests and outgoing borrow requests.</td>
+            </tr>
+            <tr>
+                <td><strong>/guidelines</strong></td>
+                <td>GET</td>
+                <td>Shows approved campus meeting points and safety protocols.</td>
+            </tr>
+            <tr>
+                <td><strong>/about-project</strong></td>
+                <td>GET</td>
+                <td>Comprehensive synopsis, mentor details, architecture, and viva guide.</td>
+            </tr>
+            <tr>
+                <td><strong>/register, /login, /logout</strong></td>
+                <td>GET, POST</td>
+                <td>Student authentication and session lifecycle management.</td>
+            </tr>
+        </table>
+
+        <h2>5. Implementation</h2>
+        <h3>5.1 Project Folder Structure</h3>
+        <table>
+            <tr>
+                <th style="width: 25%;">File / Folder</th>
+                <th>Role in the Project</th>
+            </tr>
+            <tr>
+                <td><strong>app.py</strong></td>
+                <td>Main Flask application containing route controllers, session handling, and validation.</td>
+            </tr>
+            <tr>
+                <td><strong>database.py</strong></td>
+                <td>SQLite connection utility, DDL schema executor, and sample dataset seeder.</td>
+            </tr>
+            <tr>
+                <td><strong>schema.sql</strong></td>
+                <td>Relational table definitions with constraints (users, listings, points, requests).</td>
+            </tr>
+            <tr>
+                <td><strong>test_app.py</strong></td>
+                <td>Automated unit test suite verifying catalog, filters, listings, and requests.</td>
+            </tr>
+            <tr>
+                <td><strong>run.bat</strong></td>
+                <td>One-click Windows batch launcher that boots Flask and launches default browser.</td>
+            </tr>
+            <tr>
+                <td><strong>templates/</strong></td>
+                <td>Jinja2 HTML templates (base, index, listing_detail, create, requests, etc.).</td>
+            </tr>
+            <tr>
+                <td><strong>static/</strong></td>
+                <td>Frontend assets: custom CSS (custom.css) and client-side interactions (main.js).</td>
+            </tr>
+        </table>
+
+        <h3>5.2 Core Modules and Business Logic</h3>
+        <p>
+            The backend implements three core capabilities: (1) <em>Dynamic Catalog Filtering</em> — parses search keywords and filters, constructing parameterized SQL queries; (2) <em>Tri-Model Sharing Logic</em> — tailors forms depending on whether the item is for Lend, Exchange, or Donate; and (3) <em>Handover State Synchronization</em> — atomically transitions listings and requests.
+        </p>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 7 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 8 ================= -->
+    <div class="page">
+        <h3>5.2 (Continued) Request-Interest Workflow & State Transitions</h3>
+        <p>
+            The lifecycle of an exchange progresses across four clear stages:
+        </p>
+        <ul>
+            <li><strong>Available:</strong> The material is published in the catalogue and open to all students.</li>
+            <li><strong>Pending Review:</strong> A student expresses interest. An <code>exchange_requests</code> record is saved with status 'Pending'.</li>
+            <li><strong>Pending Handover:</strong> The owner accepts the request and writes a meeting note. The book availability automatically updates to 'Pending Handover' to alert other browsing students.</li>
+            <li><strong>Completed:</strong> After meeting at the approved campus spot and verifying the book, the owner clicks 'Confirm Book Handed Over', marking both records as 'Completed'.</li>
+        </ul>
+
+        <h3>Listing Status Synchronization Logic (app.py):</h3>
+        <div class="code-box">@app.route('/requests/&lt;int:request_id&gt;/update', methods=['POST'])
+@login_required
+def update_request(request_id):
+    new_status = request.form.get('status') # 'Accepted', 'Declined', 'Completed'
+    owner_remarks = request.form.get('owner_remarks', '').strip()
+    conn = get_db()
+    conn.execute('UPDATE exchange_requests SET status = ?, owner_remarks = ? WHERE id = ?',
+                 (new_status, owner_remarks, request_id))
+    if new_status == 'Accepted':
+        conn.execute('UPDATE listings SET availability_status = ? WHERE id = ?',
+                     ('Pending Handover', req['listing_id']))
+    elif new_status == 'Completed':
+        conn.execute('UPDATE listings SET availability_status = ? WHERE id = ?',
+                     ('Completed', req['listing_id']))
+    conn.commit()
+    flash(f'Request updated to {new_status}.', 'success')</div>
+
+        <h3>5.3 Campus Safety, Privacy, and Handover Protocols</h3>
+        <p>
+            To eliminate physical safety risks and address privacy concerns, BookBridge enforces four strict protocols:
+        </p>
+        <ul>
+            <li><strong>Zero Home Address Collection:</strong> The system never asks for or displays personal residential addresses or hostel room numbers.</li>
+            <li><strong>Approved Campus Meeting Points:</strong> All exchanges must occur at pre-approved, CCTV-monitored university spots (Central Library Foyer, SAC Atrium, MCA Lab 102).</li>
+            <li><strong>Daylight Operating Hours:</strong> Exchanges are scheduled between 8:30 AM and 6:00 PM during regular academic working hours.</li>
+            <li><strong>On-Site Inspection Checklist:</strong> Students verify textbook syllabus, edition, and page condition in person before confirming handover completion.</li>
+        </ul>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 8 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 9 ================= -->
+    <div class="page">
+        <h2>6. Testing</h2>
+        <p>
+            The application was verified using automated unit and route test suites written in Python's <code>unittest</code> framework alongside manual browser walkthroughs. Tests validate database queries, route access permissions, listing creation, search filters, and the request-interest lifecycle.
+        </p>
+
+        <h3>6.1 Sample Functional and Business Logic Test Cases</h3>
+        <table>
+            <tr>
+                <th style="width: 5%;">#</th>
+                <th style="width: 28%;">Test Scenario / Input</th>
+                <th style="width: 28%;">Expected Output</th>
+                <th style="width: 29%;">Actual Output</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Load home page (GET /)</td>
+                <td>HTTP 200, displays hero banner and seed book cards</td>
+                <td>HTTP 200, 8 book cards rendered</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Search query 'DBMS' or 'Korth'</td>
+                <td>Filters listings to show Database System Concepts</td>
+                <td>Shows Korth DBMS textbook</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Filter by type 'Donate'</td>
+                <td>Displays only free donation materials (Java, Python Notes)</td>
+                <td>Displays matching donation cards</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>View book detail (/listing/1)</td>
+                <td>HTTP 200, displays full metadata & meeting point</td>
+                <td>HTTP 200, renders detail page</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Post listing as unauthenticated user</td>
+                <td>Redirects to /login with flash warning message</td>
+                <td>Redirected to login successfully</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Sign in via Roll No: 10517704426</td>
+                <td>Validates password hash; starts session as Sanya</td>
+                <td>Logged in as Sanya (MCA 1-B)</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Create listing without Title</td>
+                <td>Form validation halts; prompts for mandatory fields</td>
+                <td>Halted with alert notification</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Submit valid listing (Automata Theory)</td>
+                <td>Inserts into listings; redirects to detail page</td>
+                <td>Saved to SQLite; detail loaded</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Submit interest request on peer's book</td>
+                <td>Inserts into exchange_requests with status 'Pending'</td>
+                <td>Saved with status 'Pending'</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Attempt requesting own listed book</td>
+                <td>Blocked with warning: cannot request own listing</td>
+                <td>Blocked with warning notice</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>Owner accepts request on their book</td>
+                <td>Request &rarr; 'Accepted'; Book &rarr; 'Pending Handover'</td>
+                <td>Statuses updated atomically</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 9 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 10 ================= -->
+    <div class="page">
+        <h3>6.2 Web Application Route Test Cases</h3>
+        <table>
+            <tr>
+                <th style="width: 5%;">#</th>
+                <th style="width: 32%;">Test Scenario</th>
+                <th style="width: 53%;">Expected Behavior</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Open /, /guidelines, /about-project</td>
+                <td>All public routes load properly with HTTP status 200.</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Student registration via /register</td>
+                <td>Saves student to users table and auto-authenticates session.</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Duplicate enrollment number registration</td>
+                <td>Rejected by SQLite UNIQUE constraint with user-friendly alert.</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>1-Click demo login (/demo-login/1)</td>
+                <td>Instantly switches session to Sanya (MCA 1-B) for viva evaluation.</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Load /dashboard/my-listings and /my-requests</td>
+                <td>Displays student's materials and pending request notification badges.</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Delete listing (/listings/&lt;id&gt;/delete)</td>
+                <td>Removes listing from SQLite and cascade-cleans associated requests.</td>
+                <td><strong>Pass</strong></td>
+            </tr>
+        </table>
+
+        <h2>7. Results and Application Screenshots</h2>
+        <p>
+            When run locally at <strong>http://127.0.0.1:5000</strong>, all modules of <strong>BookBridge</strong> execute smoothly. The catalogue presents course materials across core MCA subjects, live keyword search filters books instantly, and the request-interest flow synchronizes state across student sessions.
+        </p>
+
+        <div class="fig-placeholder">
+            <strong>Fig. 7.1 – Home Page & Course Material Catalogue</strong><br/>
+            <span style="color: #6b7280; font-size: 8.5pt;">(Paste screenshot showing the Hero banner, live campus stats counter, multi-criteria filter toolbar, and responsive book cards with condition and exchange badges)</span>
+        </div>
+
+        <div class="fig-placeholder">
+            <strong>Fig. 7.2 – Book Detail View & Express Interest Form</strong><br/>
+            <span style="color: #6b7280; font-size: 8.5pt;">(Paste screenshot showing textbook metadata, author, condition remarks, approved campus meeting point card, and the interactive borrower request-interest submission form)</span>
+        </div>
+
+        <div class="fig-placeholder">
+            <strong>Fig. 7.3 – Student Dashboard (My Listings, Requests Hub) & Safe Handover Guidelines</strong><br/>
+            <span style="color: #6b7280; font-size: 8.5pt;">(Paste screenshots showing the My Posted Materials management table, Incoming/Outgoing request coordination tabs with Accept/Complete controls, and the Safe Campus Handover Directory)</span>
+        </div>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 10 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 11 ================= -->
+    <div class="page">
+        <h2>8. Limitations, Future Scope, and Conclusion</h2>
+        <h3>8.1 Limitations</h3>
+        <ul>
+            <li><strong>Local Campus Deployment:</strong> The prototype currently runs locally and requires deployment on university intranet servers for cross-device access across the campus network.</li>
+            <li><strong>Manual Physical Inspection:</strong> Evaluation of physical wear relies on student descriptions until visual inspection takes place at the handover meeting point.</li>
+            <li><strong>No Real-Time Push Notifications:</strong> Students check their web dashboard to see new incoming requests rather than receiving SMS or push notifications.</li>
+            <li><strong>Single Campus Boundary:</strong> Handover spots are configured for a single university campus and do not support multi-city university branches.</li>
+        </ul>
+
+        <h3>8.2 Future Scope</h3>
+        <ul>
+            <li><strong>Automated SMS & Email Alerts:</strong> Integrate college SMTP or SMS gateways to alert owners immediately when an interest request is posted.</li>
+            <li><strong>Handover QR Verification:</strong> Generate unique QR codes scanned at the library desk to timestamp and record physical book exchanges.</li>
+            <li><strong>ISBN Barcode Scanner:</strong> Enable mobile camera barcode scanning to auto-fetch book title, edition, and publisher metadata.</li>
+            <li><strong>AI-Based Syllabus Matcher:</strong> Automatically recommend relevant senior textbooks based on enrolled courses during semester registration.</li>
+        </ul>
+
+        <h3>8.3 Conclusion</h3>
+        <p>
+            <strong>BookBridge</strong> fulfills all objectives established for this minor project. It provides university students with an affordable, sustainable, and privacy-conscious alternative to buying new commercial textbooks each semester. By combining a searchable web interface, an embedded relational database, a request-interest state machine, and approved on-campus handover protocols, the project provides a practical application of web development and database concepts taught in the MCA curriculum.
+        </p>
+
+        <h2>References</h2>
+        <p>1. Flask Documentation – Pallets Projects (flask.palletsprojects.com)</p>
+        <p>2. Python 3 Documentation (sqlite3, hashlib, and unittest modules) – Python Software Foundation (docs.python.org)</p>
+        <p>3. SQLite Documentation & SQL Syntax – SQLite Consortium (sqlite.org/docs.html)</p>
+        <p>4. Bootstrap 5.3 Documentation – Twitter / The Bootstrap Authors (getbootstrap.com/docs/5.3)</p>
+        <p>5. MDN Web Docs: HTML5 Semantic Elements, CSS3 Layouts, and JavaScript Fetch API – Mozilla (developer.mozilla.org)</p>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 11 of 12</span>
+        </div>
+    </div>
+
+    <!-- ================= PAGE 12 ================= -->
+    <div class="page">
+        <p>6. University Grants Commission (UGC) Guidelines on Campus Safety & Student Welfare (ugc.gov.in)</p>
+
+        <h2 style="margin-top: 18px;">Appendix A: Steps to Run the Project</h2>
+        <div class="code-box">1. Ensure Python 3.10 or later is installed on the system.
+2. Open a terminal or command prompt inside the project folder: cd bookbridge
+3. Install required web dependencies: pip install flask
+4. Initialize the SQLite database and seed sample textbooks: python database.py
+5. Start the Flask local development server: python app.py
+6. Open your web browser and navigate to: http://127.0.0.1:5000
+7. Run the automated test suite: python test_app.py</div>
+
+        <h2 style="margin-top: 24px;">Appendix B: Plagiarism Check Report</h2>
+        <p>
+            <em>Note: As instructed by the project mentor, the official plagiarism verification report obtained from the college library is attached below/following this page.</em>
+        </p>
+
+        <div style="border: 2px solid #cbd5e1; background: #f9fafb; border-radius: 8px; padding: 50px 20px; text-align: center; margin-top: 30px;">
+            <h3 style="color: #1e3a8a; margin-top: 0; font-size: 13pt;">ATTACH LIBRARY PLAGIARISM REPORT HERE</h3>
+            <p style="color: #4b5563; font-size: 9.5pt; margin-bottom: 0;">
+                Student Name: <strong>Sanya</strong> &bull; Enrollment No.: <strong>10517704426</strong> &bull; Course: <strong>MCA 1-B</strong><br/>
+                Project Mentor: <strong>Dr. Cosmena</strong>
+            </p>
+        </div>
+
+        <div class="page-footer">
+            <span>BookBridge – Campus Book Exchange | Sanya (10517704426)</span>
+            <span>Page 12 of 12</span>
+        </div>
+    </div>
+
+</body>
+</html>

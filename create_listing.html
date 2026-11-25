@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Post Learning Material | BookBridge{% endblock %}
+
+{% block content %}
+<div class="container-xl py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-xl-7">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-navy text-white p-4">
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <i class="bi bi-plus-circle-fill text-warning fs-4"></i>
+                        <h4 class="fw-bold mb-0">Post Book or Study Material</h4>
+                    </div>
+                    <p class="text-white-50 small mb-0">
+                        Help fellow students by listing your unused textbook, reference guide, or lab manual for lending, exchange, or donation.
+                    </p>
+                </div>
+
+                <div class="card-body p-4">
+                    <form action="{{ url_for('create_listing') }}" method="POST">
+                        <!-- Book Title -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Book / Material Title <span class="text-danger">*</span></label>
+                            <input type="text" name="title" class="form-control" placeholder="e.g. Database System Concepts (6th Edition)" required>
+                            <div class="form-text">Include edition if known (e.g., 2nd Ed, 5th Ed, International Edition).</div>
+                        </div>
+
+                        <!-- Author -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Author(s) / Publisher <span class="text-danger">*</span></label>
+                            <input type="text" name="author" class="form-control" placeholder="e.g. Silberschatz, Korth & Sudarshan" required>
+                        </div>
+
+                        <!-- Subject -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Subject / Module <span class="text-danger">*</span></label>
+                            <input type="text" name="subject" class="form-control" placeholder="e.g. Database Management Systems, Computer Networks, OOP with Java" required>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <!-- Course -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Course / Branch</label>
+                                <select name="course" class="form-select">
+                                    <option value="MCA" selected>MCA (Master of Computer Applications)</option>
+                                    <option value="B.Tech CS">B.Tech (Computer Science & Engg)</option>
+                                    <option value="BCA">BCA (Bachelor of Computer Applications)</option>
+                                    <option value="B.Tech IT">B.Tech (Information Technology)</option>
+                                    <option value="M.Tech CS">M.Tech (Computer Science)</option>
+                                    <option value="General Science">General Science / Mathematics</option>
+                                </select>
+                            </div>
+
+                            <!-- Semester -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Target Semester</label>
+                                <select name="semester" class="form-select">
+                                    <option value="Semester 1" selected>Semester 1</option>
+                                    <option value="Semester 2">Semester 2</option>
+                                    <option value="Semester 3">Semester 3</option>
+                                    <option value="Semester 4">Semester 4</option>
+                                    <option value="All Semesters">All Semesters / General Reference</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-3">
+                            <!-- Listing Type -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Listing Purpose / Type <span class="text-danger">*</span></label>
+                                <select name="listing_type" class="form-select" id="listingTypeSelect">
+                                    <option value="Lend" selected>Lend (Borrow & Return after term)</option>
+                                    <option value="Exchange">Exchange (Trade for another book)</option>
+                                    <option value="Donate">Free Donation (Give to junior/peer)</option>
+                                </select>
+                            </div>
+
+                            <!-- Condition -->
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Book Condition <span class="text-danger">*</span></label>
+                                <select name="condition" class="form-select">
+                                    <option value="Like New">Like New (Unmarked, crisp pages)</option>
+                                    <option value="Good" selected>Good (Minor wear, all pages intact)</option>
+                                    <option value="Fair / Marked">Fair (Some pencil/highlighter notes)</option>
+                                    <option value="Annotated / Notes">Annotated / Lab Manual Notes</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Preferred Approved Campus Meeting Point -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Preferred Safe Campus Meeting Point <span class="text-danger">*</span></label>
+                            <select name="preferred_meeting_point_id" class="form-select" required>
+                                {% for mp in meeting_points %}
+                                    <option value="{{ mp.id }}">
+                                        {{ mp.name }} &bull; {{ mp.operating_hours }} ({{ mp.location_desc|truncate(60) }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text text-muted">
+                                <i class="bi bi-shield-check text-success me-1"></i>All exchanges take place strictly at approved university premises during day hours.
+                            </div>
+                        </div>
+
+                        <!-- Description & Remarks -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Description & Important Remarks</label>
+                            <textarea name="description" class="form-control" rows="4" placeholder="Mention key chapters, solved questions included, or what book you'd like in return if exchanging..."></textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                            <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4 fw-semibold">
+                                <i class="bi bi-cloud-arrow-up-fill me-1"></i>Publish Listing
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

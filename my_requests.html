@@ -1,0 +1,249 @@
+{% extends "base.html" %}
+
+{% block title %}Exchange & Handover Requests | BookBridge{% endblock %}
+
+{% block content %}
+<div class="container-xl py-4">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+        <div>
+            <h3 class="fw-bold text-navy mb-1">
+                <i class="bi bi-arrow-left-right text-primary me-2"></i>Requests & Handover Coordination
+            </h3>
+            <p class="text-muted small mb-0">Track interest requests for your books and manage materials you want to borrow or receive.</p>
+        </div>
+        <div>
+            <a href="{{ url_for('handover_guidelines') }}" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-shield-check text-success me-1"></i>Campus Handover Protocol
+            </a>
+        </div>
+    </div>
+
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-pills custom-pills mb-4" id="requestsTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active d-flex align-items-center gap-2 fw-semibold" id="incoming-tab" data-bs-toggle="pill" data-bs-target="#incoming-pane" type="button" role="tab">
+                <i class="bi bi-inbox-fill"></i>
+                <span>Incoming Requests (On My Materials)</span>
+                {% if incoming %}
+                    <span class="badge bg-primary rounded-pill">{{ incoming|length }}</span>
+                {% endif %}
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link d-flex align-items-center gap-2 fw-semibold" id="outgoing-tab" data-bs-toggle="pill" data-bs-target="#outgoing-pane" type="button" role="tab">
+                <i class="bi bi-send-fill"></i>
+                <span>Outgoing Requests (Sent by Me)</span>
+                {% if outgoing %}
+                    <span class="badge bg-secondary rounded-pill">{{ outgoing|length }}</span>
+                {% endif %}
+            </button>
+        </li>
+    </ul>
+
+    <!-- Tab Contents -->
+    <div class="tab-content" id="requestsTabContent">
+        
+        <!-- PANE 1: Incoming Requests -->
+        <div class="tab-pane fade show active" id="incoming-pane" role="tabpanel">
+            {% if incoming %}
+                <div class="d-flex flex-column gap-3">
+                    {% for req in incoming %}
+                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden request-card">
+                            <div class="card-body p-4">
+                                <div class="row g-3">
+                                    <!-- Request Info Column -->
+                                    <div class="col-lg-8">
+                                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                            <span class="badge bg-light text-dark border">
+                                                Book: <strong>{{ req.book_title }}</strong>
+                                            </span>
+                                            <span class="badge bg-info-subtle text-info">{{ req.listing_type }}</span>
+                                            
+                                            <!-- Status -->
+                                            {% if req.status == 'Pending' %}
+                                                <span class="badge bg-warning text-dark"><i class="bi bi-clock-history me-1"></i>Pending Your Review</span>
+                                            {% elif req.status == 'Accepted' %}
+                                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Accepted / Handover In Progress</span>
+                                            {% elif req.status == 'Declined' %}
+                                                <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i>Declined</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary"><i class="bi bi-check2-all me-1"></i>Completed</span>
+                                            {% endif %}
+                                        </div>
+
+                                        <!-- Requester Student Details -->
+                                        <div class="d-flex align-items-center gap-2 mb-2">
+                                            <div class="avatar-circle-sm bg-primary text-white">
+                                                {{ req.requester_name[0] }}
+                                            </div>
+                                            <div>
+                                                <strong class="text-navy">{{ req.requester_name }}</strong>
+                                                <span class="text-muted small">({{ req.requester_year }} &bull; Roll: {{ req.requester_enrollment }})</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Message -->
+                                        <div class="p-3 bg-light rounded-3 border mb-2 small text-secondary">
+                                            <strong>Message:</strong> "{{ req.message }}"
+                                        </div>
+
+                                        <!-- Additional details -->
+                                        <div class="row g-2 small text-muted">
+                                            {% if req.proposed_duration %}
+                                                <div class="col-sm-6">
+                                                    <i class="bi bi-hourglass-split text-primary me-1"></i>Proposed Duration: <strong class="text-dark">{{ req.proposed_duration }}</strong>
+                                                </div>
+                                            {% endif %}
+                                            {% if req.offered_exchange_item %}
+                                                <div class="col-sm-6">
+                                                    <i class="bi bi-arrow-repeat text-warning me-1"></i>Offered in Trade: <strong class="text-dark">{{ req.offered_exchange_item }}</strong>
+                                                </div>
+                                            {% endif %}
+                                            <div class="col-sm-6">
+                                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>Campus Spot: <strong class="text-dark">{{ req.meeting_point_name or "Campus Designated Area" }}</strong>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <i class="bi bi-clock me-1"></i>Requested On: {{ req.created_at[:16] }}
+                                            </div>
+                                        </div>
+
+                                        {% if req.owner_remarks %}
+                                            <div class="mt-2 p-2 bg-success-subtle text-success-emphasis rounded border border-success-subtle small">
+                                                <strong>Your Note / Instructions:</strong> "{{ req.owner_remarks }}"
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Actions Column -->
+                                    <div class="col-lg-4 border-start-lg d-flex flex-column justify-content-center p-lg-3 bg-light-subtle rounded-end">
+                                        {% if req.status == 'Pending' %}
+                                            <h6 class="fw-bold small text-navy mb-2">Respond to Student</h6>
+                                            <form action="{{ url_for('update_request', request_id=req.id) }}" method="POST">
+                                                <div class="mb-2">
+                                                    <input type="text" name="owner_remarks" class="form-control form-control-sm" placeholder="Meeting time (e.g. Meet tomorrow 1:30 PM at Library)">
+                                                </div>
+                                                <div class="d-grid gap-2">
+                                                    <button type="submit" name="status" value="Accepted" class="btn btn-success btn-sm fw-semibold">
+                                                        <i class="bi bi-check-lg me-1"></i>Accept & Handover
+                                                    </button>
+                                                    <button type="submit" name="status" value="Declined" class="btn btn-outline-danger btn-sm" onclick="return confirm('Decline this request?');">
+                                                        <i class="bi bi-x-lg me-1"></i>Decline
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        {% elif req.status == 'Accepted' %}
+                                            <div class="text-center">
+                                                <div class="badge bg-success-subtle text-success p-2 mb-2 w-100">
+                                                    <i class="bi bi-check-circle-fill me-1"></i>Handover In Progress
+                                                </div>
+                                                <p class="x-small text-muted mb-2">Once you have met on campus and exchanged the book, mark it as completed.</p>
+                                                
+                                                <div class="small p-2 bg-white rounded border mb-2 text-start">
+                                                    <div class="fw-semibold text-dark"><i class="bi bi-telephone text-primary me-1"></i>Student Contact:</div>
+                                                    <div>Email: {{ req.requester_email }}</div>
+                                                    {% if req.requester_phone %}
+                                                        <div>Phone: {{ req.requester_phone }}</div>
+                                                    {% endif %}
+                                                </div>
+
+                                                <form action="{{ url_for('update_request', request_id=req.id) }}" method="POST">
+                                                    <button type="submit" name="status" value="Completed" class="btn btn-primary btn-sm w-100 fw-semibold mb-1">
+                                                        <i class="bi bi-check2-all me-1"></i>Confirm Book Handed Over
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        {% else %}
+                                            <div class="text-center text-muted small py-3">
+                                                <i class="bi bi-archive me-1"></i>Request finalized ({{ req.status }})
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
+                    <i class="bi bi-inbox text-muted mb-3" style="font-size: 3rem;"></i>
+                    <h5 class="fw-bold text-navy">No incoming requests yet</h5>
+                    <p class="text-muted small max-w-500 mx-auto">
+                        When another student expresses interest in one of your listed books or notes, their request will appear here for you to accept.
+                    </p>
+                    <div>
+                        <a href="{{ url_for('create_listing') }}" class="btn btn-primary btn-sm px-4">Post More Books</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- PANE 2: Outgoing Requests -->
+        <div class="tab-pane fade" id="outgoing-pane" role="tabpanel">
+            {% if outgoing %}
+                <div class="d-flex flex-column gap-3">
+                    {% for req in outgoing %}
+                        <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                            <div class="card-body p-4">
+                                <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h5 class="fw-bold text-navy mb-1">
+                                            <a href="{{ url_for('listing_detail', listing_id=req.listing_id) }}" class="text-decoration-none text-navy">
+                                                {{ req.book_title }}
+                                            </a>
+                                        </h5>
+                                        <small class="text-muted">By {{ req.book_author }} &bull; Owned by <strong class="text-dark">{{ req.owner_name }}</strong> ({{ req.owner_year }})</small>
+                                    </div>
+                                    <div>
+                                        {% if req.status == 'Pending' %}
+                                            <span class="badge bg-warning text-dark px-3 py-2"><i class="bi bi-clock me-1"></i>Pending Review</span>
+                                        {% elif req.status == 'Accepted' %}
+                                            <span class="badge bg-success px-3 py-2"><i class="bi bi-check-circle-fill me-1"></i>Accepted! Handover Ready</span>
+                                        {% elif req.status == 'Declined' %}
+                                            <span class="badge bg-danger px-3 py-2"><i class="bi bi-x-circle me-1"></i>Declined</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary px-3 py-2"><i class="bi bi-check2-all me-1"></i>Completed</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="p-3 bg-light rounded-3 border mb-3 small">
+                                    <strong>Your Message:</strong> "{{ req.message }}"
+                                </div>
+
+                                {% if req.status == 'Accepted' and req.owner_remarks %}
+                                    <div class="p-3 bg-success-subtle text-success-emphasis rounded-3 border border-success-subtle mb-3">
+                                        <h6 class="fw-bold mb-1"><i class="bi bi-geo-alt-fill me-1"></i>Owner Handover Note:</h6>
+                                        <p class="mb-1 small">"{{ req.owner_remarks }}"</p>
+                                        <small class="text-muted d-block">
+                                            Meeting Place: <strong>{{ req.meeting_point_name }}</strong> &bull; Contact: {{ req.owner_email }}
+                                        </small>
+                                    </div>
+                                {% endif %}
+
+                                <div class="d-flex justify-content-between align-items-center text-muted small pt-2 border-top">
+                                    <span>Submitted on: {{ req.created_at[:16] }}</span>
+                                    <a href="{{ url_for('listing_detail', listing_id=req.listing_id) }}" class="btn btn-sm btn-outline-primary">
+                                        View Book Details &rarr;
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
+                    <i class="bi bi-send text-muted mb-3" style="font-size: 3rem;"></i>
+                    <h5 class="fw-bold text-navy">You have not requested any books yet</h5>
+                    <p class="text-muted small max-w-500 mx-auto">
+                        Browse the campus catalogue to discover textbooks for your semester and express interest with one click.
+                    </p>
+                    <div>
+                        <a href="{{ url_for('index') }}" class="btn btn-primary btn-sm px-4">Browse Catalogue</a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
